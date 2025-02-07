@@ -1,5 +1,10 @@
+import { AnimatedNumber } from '@/components/ui/animated-number';
+import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
-import { AnimatedNumber } from './components/ui/animated-number';
+
+export const Route = createFileRoute('/')({
+  component: App,
+});
 
 function App() {
   const [value, setValue] = useState(0);
@@ -15,7 +20,7 @@ function App() {
           className='inline-flex items-center font-mono text-5xl font-bold text-zinc-800 dark:text-zinc-50'
           springOptions={{
             bounce: 0,
-            duration: 2000,
+            duration: 1500,
           }}
           value={value}
         />
