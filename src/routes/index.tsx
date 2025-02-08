@@ -1,5 +1,7 @@
-import { AnimatedNumber } from '@/components/ui/animated-number';
+import { Button } from '@/components/ui/button';
+import app from '@/firebase/firebaseConfig';
 import { createFileRoute } from '@tanstack/react-router';
+import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut, User } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 
 export const Route = createFileRoute('/')({
@@ -7,23 +9,50 @@ export const Route = createFileRoute('/')({
 });
 
 function App() {
-  const [value, setValue] = useState(0);
+  const [user, setUser] = useState<User | null>(null);
+  const auth = getAuth(app);
+
+  async function signInWithGoogle() {
+    const provider = new GoogleAuthProvider();
+    const auth = getAuth(app);
+    const userCredential = await signInWithPopup(auth, provider);
+    return userCredential.user;
+  }
+
+  async function logOut() {
+    await signOut(auth);
+  }
 
   useEffect(() => {
-    setValue(1000);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
+
+  console.log(user);
 
   return (
     <>
       <div className='flex h-[100dvh] items-center justify-center'>
-        <AnimatedNumber
-          className='inline-flex items-center font-mono text-5xl font-bold text-zinc-800 dark:text-zinc-50'
-          springOptions={{
-            bounce: 0,
-            duration: 1500,
-          }}
-          value={value}
-        />
+        {user ? (
+          <Button onClick={logOut}>Log out</Button>
+        ) : (
+          <Button
+            onClick={() =>
+              signInWithGoogle()
+                .then((user) => console.log(user))
+                .catch((error) => console.error(error))
+            }
+          >
+            Log in with Google
+          </Button>
+        )}
       </div>
     </>
   );
