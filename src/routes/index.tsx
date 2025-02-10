@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import app from '@/firebase/firebaseConfig';
+import client from '@/utils/client';
 import { createFileRoute } from '@tanstack/react-router';
 import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut, User } from 'firebase/auth';
 import { useEffect, useState } from 'react';
@@ -37,22 +38,45 @@ function App() {
 
   console.log(user);
 
+  async function handleFetch() {
+    try {
+      const user = await signInWithGoogle();
+      console.log(user);
+      if (user) {
+        const idToken = await user.getIdToken();
+        const response = await client.api.auth.$post({
+          form: {
+            idToken,
+          },
+        });
+        const data = await response.json();
+        console.log(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       <div className='flex h-[100dvh] items-center justify-center'>
-        {user ? (
-          <Button onClick={logOut}>Log out</Button>
-        ) : (
+        {user ? <Button onClick={logOut}>Log out</Button> : <Button onClick={handleFetch}>Log in with Google</Button>}
+        <div>
           <Button
-            onClick={() =>
-              signInWithGoogle()
-                .then((user) => console.log(user))
-                .catch((error) => console.error(error))
-            }
+            onClick={async () => {
+              const idToken = "test"
+              const response = await client.api.auth.$post({
+                form: {
+                  idToken,
+                },
+              });
+              const data = await response.json();
+              console.log(data);
+            }}
           >
-            Log in with Google
+            Test Client
           </Button>
-        )}
+        </div>
       </div>
     </>
   );

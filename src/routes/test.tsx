@@ -12,9 +12,23 @@ function RouteComponent() {
     console.log(data);
   }
 
+  async function handlePost() {
+    const response = await client.api.hello.$post({
+      form: {
+        name: 'John',
+      },
+    });
+
+    const data = await response.json();
+    console.log(data);
+  }
+
+  
+
   return (
     <div>
       <Button onClick={handleFetch}>Test Client</Button>
+      <Button onClick={handlePost}>Test Client Post</Button>
     </div>
   );
 }
