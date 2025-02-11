@@ -29,11 +29,20 @@ declare const client: {
     api: {
         auth: import("hono/client").ClientRequest<{
             $post: {
-                input: {
-                    form: {
-                        idToken: string;
-                    };
+                input: {};
+                output: {
+                    message: string;
                 };
+                outputFormat: "json";
+                status: import("hono/utils/http-status").ContentfulStatusCode;
+            };
+        }>;
+    };
+} & {
+    api: {
+        protected: import("hono/client").ClientRequest<{
+            $get: {
+                input: {};
                 output: {
                     message: string;
                 };
