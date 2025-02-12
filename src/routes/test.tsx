@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import client from '@/utils/client';
 import { createFileRoute } from '@tanstack/react-router';
+import { Home } from 'lucide-react';
 
 export const Route = createFileRoute('/test')({
   component: RouteComponent,
@@ -29,6 +30,9 @@ function RouteComponent() {
     <div>
       <Button onClick={handleFetch}>Test Client</Button>
       <Button onClick={handlePost}>Test Client Post</Button>
+      <Home
+        size={20}
+      />
     </div>
   );
 }

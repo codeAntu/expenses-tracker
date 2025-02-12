@@ -1,17 +1,8 @@
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarProvider,
-  SidebarTrigger,
-} from '@/components/ui/sidebar';
+import { Tilt } from '@/components/ui/tilt';
 import { createFileRoute } from '@tanstack/react-router';
-import { Calendar, Home, Inbox, Search, Settings } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Minus, Plus } from 'lucide-react';
+import { AnimatedNumber } from '@/components/ui/animated-number';
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -19,83 +10,44 @@ export const Route = createFileRoute('/')({
 
 function App() {
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <main>
-        <SidebarTrigger />
-        <div>
-          <h1 className='text-3xl'>Hello from Home!</h1>
-          <p className='text-lg'>This is the home page.</p>
-        </div>
-      </main>
-    </SidebarProvider>
+    <div className='h-[100dvh]'>
+      <TiltCard1 />
+    </div>
   );
 }
-const items = [
-  {
-    title: 'Home',
-    url: '#',
-    icon: Home,
-  },
-  {
-    title: 'Inbox',
-    url: '#',
-    icon: Inbox,
-  },
-  {
-    title: 'Calendar',
-    url: '#',
-    icon: Calendar,
-  },
-  {
-    title: 'Search',
-    url: '#',
-    icon: Search,
-  },
-  {
-    title: 'Settings',
-    url: '#',
-    icon: Settings,
-  },
-];
 
-export function AppSidebar() {
+export function TiltCard1() {
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    setValue(1000);
+  }, []);
+
   return (
-    <Sidebar collapsible='icon'>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton >
-                  <Home />
-                  <div>
-                    <div>Antu</div>
-                    <div>Krmakar 2</div>
-                  </div>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
+    <Tilt rotationFactor={1} isRevese>
+      <div className='flex h-48 max-w-72 flex-col overflow-hidden border border-zinc-950/10 bg-white p-5 dark:border-zinc-50/10 dark:bg-zinc-900'>
+        <div className='text-3xl'>
+          <div className='flex items-center justify-center space-x-2 text-zinc-800 dark:text-zinc-50'>
+            <button aria-label='Decrement' onClick={() => setValue((prev) => prev - 100)}>
+              <Minus className='h-4 w-4' />
+            </button>
+            {/* <SlidingNumber padStart={true} value={value} /> */}
 
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-    </Sidebar>
+            <AnimatedNumber
+              className='inline-flex items-center font-mono text-2xl font-light'
+              springOptions={{
+                bounce: 0,
+                duration: 1000,
+              }}
+              value={value}
+            />
+            <button aria-label='Increment' onClick={() => setValue((prev) => prev + 100)}>
+              <Plus className='h-4 w-4' />
+            </button>
+          </div>
+        </div>
+      </div>
+    </Tilt>
   );
 }
 
