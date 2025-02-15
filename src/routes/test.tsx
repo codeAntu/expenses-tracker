@@ -13,26 +13,37 @@ function RouteComponent() {
     console.log(data);
   }
 
-  async function handlePost() {
-    const response = await client.api.hello.$post({
-      form: {
-        name: 'John',
-      },
-    });
-
+  async function test() {
+    const response = await client.api.test.$get();
     const data = await response.json();
     console.log(data);
   }
 
-  
+  async function text() {
+    const response = await fetch('http://localhost:3000/api/test');
+    const data = await response.json();
+    console.log(data);
+  }
+
+  async function testPost() {
+    const response = await client.api.test.$post({
+      form: {
+        name: 'test',
+        email: 'test@gmail.com',
+        age: '20',
+      },
+    });
+    const data = await response.json();
+    console.log(data);
+  }
 
   return (
     <div>
       <Button onClick={handleFetch}>Test Client</Button>
-      <Button onClick={handlePost}>Test Client Post</Button>
-      <Home
-        size={20}
-      />
+      <Button onClick={test}>Test Client Index</Button>
+      <Button onClick={text}>Test Fetch</Button>
+      <Button onClick={testPost}>Test Post</Button>
+      <Home size={20} />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { hc } from "hono/client";
 declare const client: {
     api: {
-        hello: import("hono/client").ClientRequest<{
+        test: import("hono/client").ClientRequest<{
             $get: {
                 input: {};
                 output: {
@@ -10,13 +10,14 @@ declare const client: {
                 outputFormat: "json";
                 status: import("hono/utils/http-status").ContentfulStatusCode;
             };
-        }>;
-    };
-} & {
-    api: {
-        hello: import("hono/client").ClientRequest<{
             $post: {
-                input: {};
+                input: {
+                    form: {
+                        name: string;
+                        email: string;
+                        age: string;
+                    };
+                };
                 output: {
                     message: string;
                 };
@@ -36,11 +37,95 @@ declare const client: {
                 outputFormat: "json";
                 status: import("hono/utils/http-status").ContentfulStatusCode;
             };
+            $get: {
+                input: {};
+                output: {
+                    message: string;
+                };
+                outputFormat: "json";
+                status: import("hono/utils/http-status").ContentfulStatusCode;
+            };
         }>;
     };
 } & {
     api: {
-        protected: import("hono/client").ClientRequest<{
+        user: import("hono/client").ClientRequest<{
+            $get: {
+                input: {};
+                output: {
+                    message: string;
+                    user: {
+                        id: string;
+                        name: string;
+                        username: string;
+                        email: string;
+                        totalAmount: string;
+                        createdAt: string;
+                        updatedAt: string;
+                    };
+                };
+                outputFormat: "json";
+                status: import("hono/utils/http-status").ContentfulStatusCode;
+            };
+        }>;
+    };
+} & {
+    api: {
+        user: {
+            user: import("hono/client").ClientRequest<{
+                $post: {
+                    input: {};
+                    output: {
+                        message: string;
+                        userId: {
+                            id: string;
+                        }[];
+                    };
+                    outputFormat: "json";
+                    status: import("hono/utils/http-status").ContentfulStatusCode;
+                };
+            }>;
+        };
+    };
+} & {
+    api: {
+        transaction: import("hono/client").ClientRequest<{
+            $get: {
+                input: {};
+                output: {
+                    transactions: {
+                        id: string;
+                        amount: number;
+                        description: string;
+                        transactionType: "income" | "expense";
+                        userId: string;
+                        createdAt: string;
+                        updatedAt: string;
+                    }[];
+                };
+                outputFormat: "json";
+                status: import("hono/utils/http-status").ContentfulStatusCode;
+            };
+            $post: {
+                input: {};
+                output: {
+                    message: string;
+                    transaction: {
+                        id: string;
+                    }[];
+                    updatedAmount: {
+                        id: string;
+                        amount: string;
+                    }[];
+                };
+                outputFormat: "json";
+                status: import("hono/utils/http-status").ContentfulStatusCode;
+            };
+        }>;
+    };
+} & {
+    api: {
+        hello: import("hono/client").ClientRequest<{
             $get: {
                 input: {};
                 output: {
