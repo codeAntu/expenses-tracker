@@ -37,12 +37,19 @@ function RouteComponent() {
     console.log(data);
   }
 
+  async function transaction() {
+    const response = await client.api.transaction.$get();
+    const data = await response.json();
+    console.log(data);
+  }
+
   return (
     <div>
       <Button onClick={handleFetch}>Test Client</Button>
       <Button onClick={test}>Test Client Index</Button>
       <Button onClick={text}>Test Fetch</Button>
       <Button onClick={testPost}>Test Post</Button>
+      <Button onClick={transaction}>Test Transaction</Button>
       <Home size={20} />
     </div>
   );

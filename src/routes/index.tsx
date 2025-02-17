@@ -10,7 +10,7 @@ export const Route = createFileRoute('/')({
 
 function App() {
   return (
-    <div className='h-[100dvh]'>
+    <div className=''>
       <TiltCard1 />
     </div>
   );
@@ -22,6 +22,9 @@ export function TiltCard1() {
   useEffect(() => {
     setValue(1000);
   }, []);
+
+
+
 
   return (
     <Tilt rotationFactor={1} isRevese>
