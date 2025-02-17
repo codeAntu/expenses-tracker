@@ -1,7 +1,6 @@
 import { Tilt } from '@/components/ui/tilt';
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
-import { Minus, Plus } from 'lucide-react';
 import { AnimatedNumber } from '@/components/ui/animated-number';
 
 export const Route = createFileRoute('/')({
@@ -20,34 +19,25 @@ export function TiltCard1() {
   const [value, setValue] = useState(0);
 
   useEffect(() => {
-    setValue(1000);
+    setValue(1000000000);
   }, []);
 
-
-
-
   return (
-    <Tilt rotationFactor={1} isRevese>
-      <div className='flex h-48 max-w-72 flex-col overflow-hidden border border-zinc-950/10 bg-white p-5 dark:border-zinc-50/10 dark:bg-zinc-900'>
-        <div className='text-3xl'>
-          <div className='flex items-center justify-center space-x-2 text-zinc-800 dark:text-zinc-50'>
-            <button aria-label='Decrement' onClick={() => setValue((prev) => prev - 100)}>
-              <Minus className='h-4 w-4' />
-            </button>
-            {/* <SlidingNumber padStart={true} value={value} /> */}
-
+    <Tilt rotationFactor={4} isRevese>
+      <div className='bg-accent border-foreground/5 flex inline-flex flex-col items-center justify-center overflow-hidden rounded-xl border p-5'>
+        <div className='flex h-full w-full flex-col'>
+          <div className='text-accent-foreground/50 text-xl font-bold'>Total Money</div>
+          <div className='flex items-center justify-center space-x-2 px-10 py-10 text-zinc-800 dark:text-zinc-50'>
             <AnimatedNumber
-              className='inline-flex items-center font-mono text-2xl font-light'
+              className='inline-flex items-center font-mono text-5xl font-bold'
               springOptions={{
                 bounce: 0,
                 duration: 1000,
               }}
               value={value}
             />
-            <button aria-label='Increment' onClick={() => setValue((prev) => prev + 100)}>
-              <Plus className='h-4 w-4' />
-            </button>
           </div>
+          <div className='text-accent-foreground/50 text-xl font-bold'></div>
         </div>
       </div>
     </Tilt>

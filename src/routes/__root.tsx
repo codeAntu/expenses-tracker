@@ -19,7 +19,7 @@ function App({ children }: { children: React.ReactNode }) {
     <ThemeProvider>
       {/* <SidebarProvider className=''> */}
         {/* <AppSidebar /> */}
-        <main className='flex h-[100dvh] w-full flex-col gap-3 p-3 sm:gap-5'>
+        <main className='flex h-[100dvh] w-full flex-col gap-3 p-3 sm:p-5 sm:gap-5'>
           <Header />
           {children}
         </main>
