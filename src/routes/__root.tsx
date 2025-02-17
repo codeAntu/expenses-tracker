@@ -18,11 +18,9 @@ function App({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider>
       {/* <SidebarProvider className=''> */}
-        {/* <AppSidebar /> */}
-        <main className='flex h-[100dvh] w-full flex-col gap-3 p-3 sm:p-5 sm:gap-5'>
-          <Header />
-          {children}
-        </main>
+      {/* <AppSidebar /> */}
+      <Header />
+      <main className='flex h-[100dvh] w-full flex-col gap-3 p-3 sm:gap-5 sm:p-5'>{children}</main>
       {/* </SidebarProvider> */}
     </ThemeProvider>
   );
