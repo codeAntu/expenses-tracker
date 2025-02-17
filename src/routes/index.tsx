@@ -1,7 +1,7 @@
 import Calendar from '@/components/calendar';
 import { Tilt } from '@/components/ui/tilt';
 import { createFileRoute } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
+
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -17,12 +17,6 @@ function App() {
 }
 
 export function TiltCard1() {
-  const [value, setValue] = useState(0);
-
-  useEffect(() => {
-    setValue(1000000000);
-  }, []);
-
   return (
     <Tilt rotationFactor={1} isRevese>
       <div className='bg-accent border-foreground/5 inline-flex flex-col items-center justify-center overflow-hidden rounded-xl border p-5'>
