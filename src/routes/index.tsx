@@ -9,11 +9,32 @@ export const Route = createFileRoute('/')({
 
 function App() {
   return (
-    <div className='flex justify-between'>
-      <div className='border-r p-2'>
-        <TiltCard1 />
+    <div className='lg: flex flex-col xl:flex-row'>
+      <div className='flex flex-1 flex-col md:flex-row'>
+        <Left />
+        <Midd />
       </div>
-      <div className='grid gap-1 border-b border-l p-5'>
+      <Right />
+    </div>
+  );
+}
+
+function Left() {
+  return (
+    <div className='flex-1 border-r p-5'>
+      <TiltCard1 />
+    </div>
+  );
+}
+
+function Midd() {
+  return <div className='flex-1'>Mid</div>;
+}
+
+function Right() {
+  return (
+    <div className='flex flex-col gap-1 border-b border-l p-5 sm:flex-row xl:flex-col'>
+      <div>
         <div className='flex items-center justify-between px-1'>
           <div className='text-secondary-foreground/90 flex items-center gap-2 pb-0.5 text-lg font-semibold'>
             Calendar
@@ -26,21 +47,22 @@ function App() {
           </Button>
         </div>
         <Calendar />
-        <div className='flex items-center justify-between px-1'>
-          <div className='text-secondary-foreground/90 flex items-center gap-2 pb-0.5 text-lg font-semibold'>
-            Calendar
-          </div>
-          <Button
-            variant='ghost'
-            className='px-4 py-0 text-base font-semibold text-blue-500 hover:bg-blue-500/10 hover:text-blue-500'
-          >
-            Add{' '}
-          </Button>
+      </div>
+      <div className='flex items-center justify-between px-1'>
+        <div className='text-secondary-foreground/90 flex items-center gap-2 pb-0.5 text-lg font-semibold'>
+          Calendar
         </div>
+        <Button
+          variant='ghost'
+          className='px-4 py-0 text-base font-semibold text-blue-500 hover:bg-blue-500/10 hover:text-blue-500'
+        >
+          Add{' '}
+        </Button>
       </div>
     </div>
   );
 }
+
 export function TiltCard1() {
   return (
     <Tilt rotationFactor={1} isRevese>

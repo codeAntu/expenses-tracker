@@ -9,20 +9,24 @@ export function ModeToggle() {
   };
 
   return (
-    <label className='switch'>
+    <label className=''>
       <input type='checkbox' checked={theme === 'dark'} onChange={toggleTheme} className='sr-only' />
-      {/* <span className=''>
-              {theme === 'light' ? (
-                <div>
-                  <Sun className='h-[1.2rem] w-[1.2rem] transition-all' />
-                </div>
-              ) : (
-                <Moon className='h-[1.2rem] w-[1.2rem] transition-all' />
-              )}
-            </span>
-            <span className='sr-only'>Toggle theme</span> */}
       <div
-        className={`border-primary/5 flex items-center justify-around rounded-full border p-0.5 transition duration-250 ${theme === 'dark' ? 'bg-secondary/70' : 'bg-secondary'}`}
+        className={`bg-secondary/70 hover:bg-secondary/60 border-primary/5 text-secondary-foreground cursor-pointer rounded-full border p-1.5 transition duration-250 lg:hidden`}
+      >
+        {theme === 'light' ? (
+          <div className=''>
+            <Sun className='h-5 w-5' />
+          </div>
+        ) : (
+          <div className=''>
+            <Moon className='h-5 w-5' />
+          </div>
+        )}
+      </div>
+      <span className='sr-only'>Toggle theme</span>
+      <div
+        className={`border-primary/5 hidden items-center justify-around rounded-full border p-0.5 transition duration-250 lg:flex ${theme === 'dark' ? 'bg-secondary/70' : 'bg-secondary'}`}
       >
         <div className={`rounded-full p-1.5 ${theme === 'dark' ? 'bg-background' : ''}`}>
           <Moon className='h-[1.2rem] w-[1.2rem] transition-all' />

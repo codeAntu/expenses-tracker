@@ -19,8 +19,11 @@ function App({ children }: { children: React.ReactNode }) {
     <ThemeProvider>
       {/* <SidebarProvider className=''> */}
       {/* <AppSidebar /> */}
-      <Header />
-      <main className='h-[100dvh] w-full'>{children}</main>
+
+      <main className='min-h-[100dvh] w-full'>
+        <Header />
+        {children}
+      </main>
       {/* </SidebarProvider> */}
     </ThemeProvider>
   );
