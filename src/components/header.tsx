@@ -13,7 +13,7 @@ export default function Header() {
         <div className='bg-secondary/70 hover:bg-secondary/60 border-primary/5 text-secondary-foreground cursor-pointer rounded-full border p-2.5 transition duration-250'>
           <Bell size={17} />
         </div>
-        <div className='bg-secondary/70 hover:bg-secondary/80 text-secondary-foreground border-primary/5 flex cursor-pointer items-center justify-center rounded-full border p-0.5 transition duration-250'>
+        <div className='bg-secondary/70 hover:bg-secondary/60 text-secondary-foreground border-primary/5 flex cursor-pointer items-center justify-center rounded-full border p-0.5 transition duration-250'>
           <div className='pr-2 pb-0.5 pl-3 text-xs font-medium'>Ananta Karmakar</div>
           <div className=''>
             <img src='https://github.com/shadcn.png' className='aspect-square w-8 rounded-full border' />

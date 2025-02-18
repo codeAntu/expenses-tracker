@@ -8,7 +8,9 @@ export default function Calendar() {
   return (
     <div className=''>
       <Box className='p-2'>
-        <Cal mode='single' selected={date} onSelect={setDate} className='rounded-md' />
+        <Cal mode='single' selected={date} onSelect={setDate} className='rounded-md' 
+          
+        />
       </Box>
     </div>
   );

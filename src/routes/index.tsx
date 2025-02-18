@@ -1,7 +1,7 @@
 import Calendar from '@/components/calendar';
+import { Button } from '@/components/ui/button';
 import { Tilt } from '@/components/ui/tilt';
 import { createFileRoute } from '@tanstack/react-router';
-
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -10,12 +10,37 @@ export const Route = createFileRoute('/')({
 function App() {
   return (
     <div className='flex justify-between'>
-      <TiltCard1 />
-      <Calendar />
+      <div className='border-r p-2'>
+        <TiltCard1 />
+      </div>
+      <div className='grid gap-1 border-b border-l p-5'>
+        <div className='flex items-center justify-between px-1'>
+          <div className='text-secondary-foreground/90 flex items-center gap-2 pb-0.5 text-lg font-semibold'>
+            Calendar
+          </div>
+          <Button
+            variant='ghost'
+            className='px-4 py-0 text-base font-semibold text-blue-500 hover:bg-blue-500/10 hover:text-blue-500'
+          >
+            Add{' '}
+          </Button>
+        </div>
+        <Calendar />
+        <div className='flex items-center justify-between px-1'>
+          <div className='text-secondary-foreground/90 flex items-center gap-2 pb-0.5 text-lg font-semibold'>
+            Calendar
+          </div>
+          <Button
+            variant='ghost'
+            className='px-4 py-0 text-base font-semibold text-blue-500 hover:bg-blue-500/10 hover:text-blue-500'
+          >
+            Add{' '}
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }
-
 export function TiltCard1() {
   return (
     <Tilt rotationFactor={1} isRevese>
