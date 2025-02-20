@@ -2,7 +2,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import Box from './box';
 import { transactions } from './transactions';
 
-export default function Transaction({ transaction }: { transaction: typeof transactions[0] }) {
+export default function Transaction({ transaction }: { transaction: (typeof transactions)[0] }) {
   return (
     <Box className='w-full flex-col items-baseline justify-baseline gap-1.5 px-3 py-3'>
       <div className='flex flex-col gap-2'>
@@ -12,7 +12,7 @@ export default function Transaction({ transaction }: { transaction: typeof trans
               <span>&#8377;</span>
               {' ' + transaction.amount.toLocaleString('en-IN')}
             </div>
-            <div className='rounded-full bg-green-500/10 p-0.5'>
+            <div className={`rounded-full p-0.5 ${transaction.type === 'income' ? 'bg-green-500/10' : 'bg-red-500/5'}`}>
               {transaction.type === 'income' ? (
                 <ChevronUp size={32} strokeWidth={3.5} className='font-extrabold text-green-500' />
               ) : (

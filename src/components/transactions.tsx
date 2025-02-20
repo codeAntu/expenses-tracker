@@ -79,7 +79,7 @@ function Transactions({ date } = { date: new Date() }) {
           {formattedDate}
         </div>
       </div>
-      <div className='flex flex-col gap-3.5'>
+      <div className='flex flex-col gap-3.5 lg:grid sm:grid-cols-2 sm:gap-3.5 xl:flex'>
         {transactions.map((transaction) => (
           <Transaction key={transaction.id} transaction={transaction} />
         ))}
