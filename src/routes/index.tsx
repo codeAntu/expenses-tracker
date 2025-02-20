@@ -19,18 +19,12 @@ function App() {
 }
 
 function Left() {
-  return (
-    <div className='flex-1 border-r p-5'>
-      {/* <TiltCard1 /> */}
-    </div>
-  );
+  return <div className='flex-1 border-r p-5'>{/* <TiltCard1 /> */}</div>;
 }
 
 function Midd() {
   return <div className='flex-1'>Mid</div>;
 }
-
-
 
 export function TiltCard1() {
   return (

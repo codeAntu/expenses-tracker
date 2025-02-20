@@ -1,7 +1,7 @@
 import Box from '@/components/box';
 import { Calendar as Cal } from '@/components/ui/calendar';
 import { useState } from 'react';
-import Transaction from '../transaction';
+import Transactions from '../transactions';
 
 function Right() {
   const [date, setDate] = useState<Date>(new Date());
@@ -9,8 +9,8 @@ function Right() {
   const today = new Date();
 
   return (
-    <div className='flex flex-col gap-1 sm:flex-row xl:flex-col'>
-      <div className='grid gap-1.5 border-b border-l p-5 pb-6'>
+    <div className='bg-red-50w flex h-full max-w-96 flex-col gap-1 self-center border-l sm:max-w-none sm:flex-1 sm:flex-row xl:max-w-[350px] xl:flex-col'>
+      <div className='flex flex-col justify-center gap-3 border-b p-5 pb-6'>
         <div className='flex items-center justify-between px-1'>
           <div className='text-secondary-foreground/90 flex items-center gap-2 pb-0.5 text-lg font-semibold'>
             Calendar
@@ -25,34 +25,24 @@ function Right() {
             Today
           </button>
         </div>
-        <Box className='p-2'>
-          <Cal key={key} mode='single' selected={date} onSelect={(day) => day && setDate(day)} className='rounded-md' />
+        <Box className='space-y-10 p-1'>
+          <Cal
+            key={key}
+            mode='single'
+            selected={date}
+            onSelect={(day) => day && setDate(day)}
+            className='flex h-full w-full items-center justify-center rounded-md'
+            classNames={{
+              months: 'w-full  min-w-[200px]  ',
+              month: 'space-y-4 w-full flex flex-col ',
+              table: 'w-full h-full border-collapse  space-y-10 ',
+              head_row: ' space-x-10',
+              row: 'w-full mt-2 ',
+            }}
+          />
         </Box>
       </div>
       <Transactions date={date} />
-    </div>
-  );
-}
-
-function Transactions({ date } = { date: new Date() }) {
-  const formattedDate = date.toLocaleDateString('en-US', {
-    day: '2-digit',
-    month: 'short',
-  });
-
-  return (
-    <div className='grid gap-1.5 border-b border-l p-5 pt-4 pb-6'>
-      <div className='flex items-center justify-between px-1'>
-        <div className='text-secondary-foreground/90 flex items-center gap-2 pb-0.5 text-lg font-semibold'>
-          Transactions
-        </div>
-        <div className='rounded-sm px-4 py-1 text-sm font-semibold text-blue-500 hover:bg-blue-500/10 hover:text-blue-500'>
-          {formattedDate}
-        </div>
-      </div>
-      <div>
-        <Transaction />
-      </div>
     </div>
   );
 }
