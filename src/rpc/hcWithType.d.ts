@@ -28,9 +28,28 @@ declare const client: {
     };
 } & {
     api: {
+        test: {
+            new: import("hono/client").ClientRequest<{
+                $post: {
+                    input: {};
+                    output: {
+                        message: string;
+                    };
+                    outputFormat: "json";
+                    status: import("hono/utils/http-status").ContentfulStatusCode;
+                };
+            }>;
+        };
+    };
+} & {
+    api: {
         auth: import("hono/client").ClientRequest<{
             $post: {
-                input: {};
+                input: {
+                    form: {
+                        idToken: string;
+                    };
+                };
                 output: {
                     message: string;
                 };

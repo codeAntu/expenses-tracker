@@ -1,6 +1,8 @@
 import { Button } from '@/components/ui/button';
+import app from '@/firebase/firebaseConfig';
 import client from '@/utils/client';
 import { createFileRoute } from '@tanstack/react-router';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { Home } from 'lucide-react';
 
 export const Route = createFileRoute('/test')({
@@ -8,6 +10,9 @@ export const Route = createFileRoute('/test')({
 });
 
 function RouteComponent() {
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
   async function handleFetch() {
     const data = await (await client.api.hello.$get()).json();
     console.log(data);
@@ -43,6 +48,26 @@ function RouteComponent() {
     console.log(data);
   }
 
+  async function authFun() {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const idToken = await user.getIdToken();
+      console.log('ID Token:', idToken);
+
+      // Send the token to the backend
+      const response = await client.api.auth.$post({
+        form: {
+          idToken: idToken,
+        },
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error('Authentication error:', error);
+    }
+  }
+
   return (
     <div>
       <Button onClick={handleFetch}>Test Client</Button>
@@ -50,6 +75,7 @@ function RouteComponent() {
       <Button onClick={text}>Test Fetch</Button>
       <Button onClick={testPost}>Test Post</Button>
       <Button onClick={transaction}>Test Transaction</Button>
+      <Button onClick={authFun}>Test New</Button>
       <Home size={20} />
     </div>
   );
