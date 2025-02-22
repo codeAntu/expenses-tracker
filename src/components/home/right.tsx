@@ -1,6 +1,7 @@
 import Box from '@/components/box';
 import { Calendar as Cal } from '@/components/ui/calendar';
 import { useState } from 'react';
+import Transactions from '../transactions';
 
 function Right() {
   const [date, setDate] = useState<Date>(new Date());
@@ -8,8 +9,8 @@ function Right() {
   const today = new Date();
 
   return (
-    <div className='bg-red-50w flex h-full max-w-96 flex-col gap-1 self-center border-l sm:max-w-none sm:flex-1 sm:flex-row xl:flex-col'>
-      <div className='flex flex-col justify-center gap-3 border-b p-5 pb-6'>
+    <div className='flex h-full max-w-[400px] flex-col gap-1 self-center border-l sm:flex-row xl:flex-col'>
+      <div className='flex flex-col justify-center gap-3 border-b p-8'>
         <div className='flex items-center justify-between px-1'>
           <div className='text-secondary-foreground/90 flex items-center gap-2 pb-0.5 text-lg font-semibold'>
             Calendar
@@ -24,9 +25,16 @@ function Right() {
             Today
           </button>
         </div>
-        <div className='flex justify-baseline border'>
-          {/* <div className='rotate-[270deg] transform text-7xl font-extrabold bg-red-200'>12Feb</div> */}
-          <Box className='space-y-10 bg-amber-100 p-1'>
+        <div className='flex justify-baseline'>
+          {/* <div className='flex grow transform items-center justify-center text-7xl font-extrabold'>
+            <div className='grow rotate-[270deg] transform text-center'>
+              {date.toLocaleDateString('en-US', {
+                day: '2-digit',
+                // month: 'short',
+              })}{' '}
+            </div>
+          </div> */}
+          <Box className='space-y-10 p-1'>
             <Cal
               key={key}
               mode='single'
@@ -44,7 +52,7 @@ function Right() {
           </Box>
         </div>
       </div>
-      {/* <Transactions date={date} /> */}
+      <Transactions date={date} />
     </div>
   );
 }

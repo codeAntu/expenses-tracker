@@ -69,7 +69,7 @@ const Goals = () => {
 };
 
 const Goal = () => {
-  const [progress, setProgress] = useState(13);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const timer = setTimeout(() => setProgress(66), 500);

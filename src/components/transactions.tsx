@@ -70,7 +70,7 @@ function Transactions({ date } = { date: new Date() }) {
   });
 
   return (
-    <div className='grid gap-3 border-l px-3.5 pt-4 pb-6'>
+    <div className='grid gap-3 border-l px-5 pt-4 pb-6'>
       <div className='flex items-center justify-between px-1'>
         <div className='text-secondary-foreground/90 flex items-center gap-2 pb-0.5 text-lg font-semibold'>
           Transactions
@@ -79,7 +79,7 @@ function Transactions({ date } = { date: new Date() }) {
           {formattedDate}
         </div>
       </div>
-      <div className='flex flex-col gap-3.5 lg:grid sm:grid-cols-2 sm:gap-3.5 xl:flex'>
+      <div className='flex flex-col gap-3.5 lg:grid sm:grid-cols-2 sm:gap-4 xl:flex'>
         {transactions.map((transaction) => (
           <Transaction key={transaction.id} transaction={transaction} />
         ))}
