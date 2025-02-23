@@ -51,6 +51,17 @@ declare const client: {
                     };
                 };
                 output: {
+                    error: string;
+                };
+                outputFormat: "json";
+                status: 401;
+            } | {
+                input: {
+                    form: {
+                        idToken: string;
+                    };
+                };
+                output: {
                     message: string;
                 };
                 outputFormat: "json";
@@ -65,46 +76,6 @@ declare const client: {
                 status: import("hono/utils/http-status").ContentfulStatusCode;
             };
         }>;
-    };
-} & {
-    api: {
-        user: import("hono/client").ClientRequest<{
-            $get: {
-                input: {};
-                output: {
-                    message: string;
-                    user: {
-                        id: string;
-                        name: string;
-                        username: string;
-                        email: string;
-                        totalAmount: string;
-                        createdAt: string;
-                        updatedAt: string;
-                    };
-                };
-                outputFormat: "json";
-                status: import("hono/utils/http-status").ContentfulStatusCode;
-            };
-        }>;
-    };
-} & {
-    api: {
-        user: {
-            user: import("hono/client").ClientRequest<{
-                $post: {
-                    input: {};
-                    output: {
-                        message: string;
-                        userId: {
-                            id: string;
-                        }[];
-                    };
-                    outputFormat: "json";
-                    status: import("hono/utils/http-status").ContentfulStatusCode;
-                };
-            }>;
-        };
     };
 } & {
     api: {
