@@ -9,7 +9,7 @@ function Right() {
   const today = new Date();
 
   return (
-    <div className='flex h-full max-w-[400px] flex-col gap-1 self-center border-l sm:flex-row xl:flex-col'>
+    <div className='flex h-full w-full flex-col gap-1 self-center border-l sm:flex-row xl:max-w-[400px] xl:flex-col'>
       <div className='flex flex-col justify-center gap-3 border-b p-8'>
         <div className='flex items-center justify-between px-1'>
           <div className='text-secondary-foreground/90 flex items-center gap-2 pb-0.5 text-lg font-semibold'>

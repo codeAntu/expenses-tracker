@@ -1,5 +1,7 @@
 import { Bell, Search as SearchIcon, Wallet } from 'lucide-react';
 import { ModeToggle } from './mode-toggle';
+import { Auth } from './auth';
+import { Button } from './ui/button';
 
 export default function Header() {
   return (
@@ -17,26 +19,33 @@ export default function Header() {
         <div className='bg-secondary/70 hover:bg-secondary/60 border-primary/5 text-secondary-foreground cursor-pointer rounded-full border p-1.5 transition duration-250 md:p-2'>
           <Bell className='h-5 w-5' />
         </div>
-        <Profile />
+        {/* <Profile /> */}
+        <Auth>
+          <Button variant='outline'>Sign in</Button>
+        </Auth>
       </div>
     </div>
   );
 }
 
-function Profile() {
-  return (
-    <div className='bg-secondary/70 hover:bg-secondary/60 text-secondary-foreground border-primary/5 flex cursor-pointer items-center justify-center rounded-full border p-0.5 transition duration-250'>
-      <div className='hidden pr-2 pb-0.5 pl-3 text-xs font-medium lg:block'>Ananta Karmakar</div>
-      <div className='w-7 sm:w-8'>
-        <img src='https://github.com/shadcn.png' className='aspect-square rounded-full border' />
-        {/* <Avatar>
-              <AvatarImage src='https://github.com/shadcn.png' alt='@shadcn' className='' />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar> */}
-      </div>
-    </div>
-  );
-}
+// function Auth() {
+//   return <SignUpPage />;
+// }
+
+// function Profile() {
+//   return (
+//     <div className='bg-secondary/70 hover:bg-secondary/60 text-secondary-foreground border-primary/5 flex cursor-pointer items-center justify-center rounded-full border p-0.5 transition duration-250'>
+//       <div className='hidden pr-2 pb-0.5 pl-3 text-xs font-medium lg:block'>Ananta Karmakar</div>
+//       <div className='w-7 sm:w-8'>
+//         <img src='https://github.com/shadcn.png' className='aspect-square rounded-full border' />
+//         {/* <Avatar>
+//               <AvatarImage src='https://github.com/shadcn.png' alt='@shadcn' className='' />
+//               <AvatarFallback>CN</AvatarFallback>
+//             </Avatar> */}
+//       </div>
+//     </div>
+//   );
+// }
 
 function Search() {
   return (
