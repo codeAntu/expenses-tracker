@@ -10,6 +10,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { signInWithEmail, signInWithProvider, signUpWithEmail } from '@/services/authService';
+import { useStore } from '@/zustand/store';
 import { useMutation } from '@tanstack/react-query';
 import { GithubAuthProvider, GoogleAuthProvider } from 'firebase/auth';
 import { AtSign, Github } from 'lucide-react';
@@ -22,7 +23,13 @@ export function Auth({ children: props }: { children: React.ReactNode }) {
   const [password, setPassword] = useState('');
   const googleProvider = new GoogleAuthProvider();
   const gitHubProvider = new GithubAuthProvider();
+  const user = useStore((state) => state.user);
+
   // const queryClient = useQueryClient();
+
+  if (user) {
+    return <Button>Logout</Button>;
+  }
 
   return (
     <Dialog>

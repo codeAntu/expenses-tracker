@@ -59,7 +59,6 @@ export async function signInWithProvider(provider: GoogleAuthProvider | GithubAu
     const data = await response.json();
     console.log(data);
     console.log('LogIn successful');
-
     return data;
   } catch (error) {
     const signOut = await auth.signOut();
