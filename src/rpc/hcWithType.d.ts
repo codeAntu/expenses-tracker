@@ -62,6 +62,37 @@ declare const client: {
                     message: string;
                 };
                 outputFormat: "json";
+                status: 401;
+            } | {
+                input: {};
+                output: {
+                    message: string;
+                    user: {
+                        [x: string]: any;
+                        aud: string;
+                        auth_time: number;
+                        email?: string | undefined;
+                        email_verified?: boolean | undefined;
+                        exp: number;
+                        firebase: {
+                            [x: string]: any;
+                            identities: {
+                                [x: string]: any;
+                            };
+                            sign_in_provider: string;
+                            sign_in_second_factor?: string | undefined;
+                            second_factor_identifier?: string | undefined;
+                            tenant?: string | undefined;
+                        };
+                        iat: number;
+                        iss: string;
+                        phone_number?: string | undefined;
+                        picture?: string | undefined;
+                        sub: string;
+                        uid: string;
+                    };
+                };
+                outputFormat: "json";
                 status: import("hono/utils/http-status").ContentfulStatusCode;
             };
         }>;
@@ -77,7 +108,6 @@ declare const client: {
                         user: {
                             id: string;
                             name: string;
-                            username: string;
                             email: string;
                             totalAmount: string;
                             createdAt: string;

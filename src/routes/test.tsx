@@ -2,32 +2,20 @@ import { Button } from '@/components/ui/button';
 import app from '@/firebase/firebaseConfig';
 import client from '@/utils/client';
 import { createFileRoute } from '@tanstack/react-router';
-import {
-  getAuth
-} from 'firebase/auth';
-import { useEffect, useState } from 'react';
+import { getAuth } from 'firebase/auth';
 
 export const Route = createFileRoute('/test')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const [user, setUser] = useState<unknown>();
   const auth = getAuth(app);
+  // const [user, setUser] = useState<unknown | null>(null);
 
-  console.log(user);
-  console.log(typeof user);
-
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        setUser(user);
-        // getToken(user);
-      } else {
-        setUser(null);
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   const newUser = auth.currentUser;
+  //   setUser(newUser);
+  // }, []);
 
   async function logout() {
     try {
@@ -39,7 +27,50 @@ function RouteComponent() {
 
   async function testCookie() {
     try {
-      const response = await client.api.auth.$get();
+      const response = await client.api.auth.$get({
+        credentials: 'include', // Ensure cookies are sent with the request
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error('Error fetching data with session cookie:', error);
+    }
+  }
+
+  // async function testCookie() {
+  //   try {
+  //     const response = await fetch('http://localhost:3000/api/auth', {
+  //       method: 'GET',
+  //       credentials: 'include', // Ensure cookies are sent with the request
+  //     });
+  //     const data = await response.json();
+  //     console.log(data);
+  //   } catch (error) {
+  //     console.error('Error fetching data with session cookie:', error);
+  //   }
+  // }
+
+  async function sendIdtoken() {
+    const user = auth.currentUser;
+    if (!user) {
+      console.error('User not found');
+      return;
+    }
+
+    const token = await user.getIdToken();
+    console.log(token, 'token');
+
+    if (!token) {
+      console.error('Token not found');
+      return;
+    }
+
+    try {
+      const response = await client.api.auth.$post({
+        form: {
+          idToken: token,
+        },
+      });
       const data = await response.json();
       console.log(data);
     } catch (error) {
@@ -51,6 +82,7 @@ function RouteComponent() {
     <div>
       <Button onClick={testCookie}>Test Cookie</Button>
       <Button onClick={logout}>Logout</Button>
+      <Button onClick={sendIdtoken}>Send Token</Button>
     </div>
   );
 }

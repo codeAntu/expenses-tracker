@@ -50,7 +50,7 @@ const chartConfig = {
 
 export function Chart() {
   return (
-    <ChartContainer config={chartConfig} className='w-full '>
+    <ChartContainer config={chartConfig} className=''>
       <BarChart accessibilityLayer data={chartData}>
         <CartesianGrid vertical={false} />
         <XAxis

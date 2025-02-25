@@ -27,7 +27,7 @@ export function Auth({ children: props }: { children: React.ReactNode }) {
   return (
     <Dialog>
       <DialogTrigger asChild>{props}</DialogTrigger>
-      <DialogContent className='max-w-[500px] rounded-xl'>
+      <DialogContent className='max-w-[400px] rounded-xl'>
         <div className='flex flex-col items-center gap-2 pt-6'>
           <DialogHeader>
             <DialogTitle className='sm:text-center'>Sign up Expense Tracker</DialogTitle>

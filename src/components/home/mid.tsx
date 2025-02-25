@@ -3,7 +3,8 @@ import { Chart } from '../chart';
 
 const Mid: FC = () => {
   return (
-    <div className='w-full bg-red p-8 '>
+    <div className='bg-red grid grid-cols-2 gap-5 p-8'>
+      <Chart />
       <Chart />
     </div>
   );
