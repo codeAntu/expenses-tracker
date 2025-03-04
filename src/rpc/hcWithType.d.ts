@@ -69,6 +69,7 @@ declare const client: {
                         name: string;
                         email: string;
                         totalAmount: string;
+                        picture: string;
                         token: string;
                     };
                 };

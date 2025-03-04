@@ -1,5 +1,6 @@
 import app from '@/firebase/firebaseConfig';
 import client from '@/utils/client';
+import { useUserStore } from '@/zustand/userStore';
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -50,7 +51,6 @@ export async function signInWithProvider(provider: GoogleAuthProvider | GithubAu
     const userCredential = await signInWithPopup(auth, provider);
     const user = userCredential.user;
     const idToken = await user.getIdToken();
-    console.log('idToken:', idToken);
     const response = await client.api.auth.$post({
       form: {
         idToken: idToken,
@@ -58,11 +58,15 @@ export async function signInWithProvider(provider: GoogleAuthProvider | GithubAu
     });
     const data = await response.json();
     console.log(data);
-    console.log('LogIn successful');
+    useUserStore.getState().setUser(data.user);
     return data;
   } catch (error) {
     const signOut = await auth.signOut();
     console.log('signOut:', signOut);
     return error;
   }
+}
+
+export default function logout() {
+  return auth.signOut();
 }

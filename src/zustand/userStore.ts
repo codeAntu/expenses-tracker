@@ -4,11 +4,11 @@ import { create } from 'zustand';
 
 interface Store {
   user: User | null;
-  setUser: (user: User) => void;
+  setUser: (user: User | null) => void;
   logout: () => void;
 }
 
-export const useStore = create<Store>((set) => {
+export const useUserStore = create<Store>((set) => {
   const savedUser = JSON.parse(ls.get('savedUser') || '{}');
   return {
     user: savedUser,

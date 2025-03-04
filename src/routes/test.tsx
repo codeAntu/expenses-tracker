@@ -1,7 +1,8 @@
+import Logout from '@/components/logout';
 import { Button } from '@/components/ui/button';
 import app from '@/firebase/firebaseConfig';
 import client from '@/utils/client';
-import { useStore } from '@/zustand/store';
+import { useUserStore } from '@/zustand/userStore';
 import { createFileRoute } from '@tanstack/react-router';
 import { getAuth } from 'firebase/auth';
 
@@ -11,18 +12,8 @@ export const Route = createFileRoute('/test')({
 
 function RouteComponent() {
   const auth = getAuth(app);
-  const user = useStore((state) => state.user);
-  const setUser = useStore((state) => state.setUser);
-  const logout = useStore((state) => state.logout);
-
-  async function logoutUser() {
-    try {
-      await auth.signOut();
-      logout();
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
-  }
+  const user = useUserStore((state) => state.user);
+  const setUser = useUserStore((state) => state.setUser);
 
   async function sendIdToken() {
     const firebaseUser = auth.currentUser;
@@ -76,7 +67,9 @@ function RouteComponent() {
 
   return (
     <div>
-      <Button onClick={logoutUser}>Logout</Button>
+      <Logout>
+        <Button>Logout</Button>
+      </Logout>
       <Button onClick={sendIdToken}>Send Token</Button>
       <Button onClick={getMe}>Get Me</Button>
 
