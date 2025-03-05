@@ -10,13 +10,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { signInWithEmail, signInWithProvider, signUpWithEmail } from '@/services/authService';
-import { useUserStore } from '@/zustand/userStore';
 import { useMutation } from '@tanstack/react-query';
 import { GithubAuthProvider, GoogleAuthProvider } from 'firebase/auth';
 import { AtSign, Github } from 'lucide-react';
 import { useId, useState } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { useNavigate } from '@tanstack/react-router';
 
 export function Auth({ children: props }: { children: React.ReactNode }) {
   const id = useId();
@@ -25,39 +22,12 @@ export function Auth({ children: props }: { children: React.ReactNode }) {
   const [password, setPassword] = useState('');
   const googleProvider = new GoogleAuthProvider();
   const gitHubProvider = new GithubAuthProvider();
-  const user = useUserStore((state) => state.user);
-  const navigate = useNavigate();
-
-  const { mutate: googleMutate, isPending: googleIsPending } = useMutation({
-    mutationKey: ['google'],
-    mutationFn: () => signInWithProvider(googleProvider),
-  });
-
-  const { mutate: gitHubMutate, isPending: gitHubIsPending } = useMutation({
-    mutationKey: ['github'],
-    mutationFn: () => signInWithProvider(gitHubProvider),
-  });
-
-  if (user) {
-    return (
-      <Avatar
-        className='size-9 cursor-pointer'
-        onClick={() => {
-          navigate({
-            to: '/profile',
-          });
-        }}
-      >
-        <AvatarImage src={user.picture} alt='@shadcn' />
-        <AvatarFallback>CN</AvatarFallback>
-      </Avatar>
-    );
-  }
+  // const queryClient = useQueryClient();
 
   return (
     <Dialog>
       <DialogTrigger asChild>{props}</DialogTrigger>
-      <DialogContent className='max-w-[400px] rounded-xl'>
+      <DialogContent className='max-w-[500px] rounded-xl'>
         <div className='flex flex-col items-center gap-2 pt-6'>
           <DialogHeader>
             <DialogTitle className='sm:text-center'>Sign up Expense Tracker</DialogTitle>
@@ -122,18 +92,16 @@ export function Auth({ children: props }: { children: React.ReactNode }) {
         <div className='grid grid-cols-2 gap-4'>
           <Button
             onClick={() => {
-              googleMutate();
+              signInWithProvider(googleProvider);
             }}
-            disabled={googleIsPending}
           >
             <AtSign size={20} className='mr-2' />
             Google
           </Button>
           <Button
             onClick={() => {
-              gitHubMutate();
+              signInWithProvider(gitHubProvider);
             }}
-            disabled={gitHubIsPending}
           >
             <Github size={20} className='mr-2' />
             Github

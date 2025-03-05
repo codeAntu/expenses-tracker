@@ -1,6 +1,4 @@
 import app from '@/firebase/firebaseConfig';
-import client from '@/utils/client';
-import { useUserStore } from '@/zustand/userStore';
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -34,14 +32,12 @@ export async function signUpWithEmail(email: string, password: string) {
   if (!validatedUser.success) {
     throw new Error(validatedUser.error.errors[0].message);
   }
+
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
     console.log('User:', user);
   } catch (error: unknown) {
-    // logout from firebase
-    const signOut = await auth.signOut();
-    console.log('signOut:', signOut);
     return error;
   }
 }
@@ -50,23 +46,9 @@ export async function signInWithProvider(provider: GoogleAuthProvider | GithubAu
   try {
     const userCredential = await signInWithPopup(auth, provider);
     const user = userCredential.user;
-    const idToken = await user.getIdToken();
-    const response = await client.api.auth.$post({
-      form: {
-        idToken: idToken,
-      },
-    });
-    const data = await response.json();
-    console.log(data);
-    useUserStore.getState().setUser(data.user);
-    return data;
+
+    console.log('User:', user);
   } catch (error) {
-    const signOut = await auth.signOut();
-    console.log('signOut:', signOut);
     return error;
   }
-}
-
-export default function logout() {
-  return auth.signOut();
 }

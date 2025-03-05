@@ -28,5 +28,9 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src"]
+  "include": [
+    "src",
+    "components/motion-primitives/morphing-popover.tsx",
+    "components/motion-primitives/useClickOutside.tsx"
+  ]
 }

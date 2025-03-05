@@ -43,23 +43,19 @@ function RouteComponent() {
   }
 
   async function getMe() {
-    if (!user) {
-      console.error('User not found');
-      return;
-    }
-
-    console.log(user.token);
-
     try {
-      const response = await client.api.auth.$get({
-        headers: {
-          Authorization: `Bearer ${user.token}`,
+      const response = await client.api.auth.test.$post(
+        {},
+        {
+          headers: {
+            Authorization: `Bearer Token`,
+          },
         },
-      });
+      );
       const data = await response.json();
       console.log(data);
     } catch (error) {
-      console.error('Error fetching data with session cookie:', error);
+      console.error('Error fetching data with token:', error);
     }
   }
 

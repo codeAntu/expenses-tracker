@@ -1,3 +1,4 @@
+import AddAmount from '@/components/addAmount';
 import Left from '@/components/home/left';
 import Mid from '@/components/home/mid';
 import Right from '@/components/home/right';
@@ -15,6 +16,10 @@ function App() {
         <Mid />
       </div>
       <Right />
+
+      <div className='fixed right-10 bottom-10'>
+        <AddAmount />
+      </div>
     </div>
   );
 }

@@ -9,4 +9,10 @@ const address = 'http://localhost:3000';
 
 const client = (hc as typeof hcWithType)(address);
 
+// const client = hc<AppType>('/api', {
+//   headers: {
+//     Authorization: 'Bearer TOKEN',
+//   },
+// })
+
 export default client;
