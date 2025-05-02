@@ -52,3 +52,8 @@ export async function signInWithProvider(provider: GoogleAuthProvider | GithubAu
     return error;
   }
 }
+
+export async function logout() {
+  await auth.signOut();
+  console.log('User signed out');
+}

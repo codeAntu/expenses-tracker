@@ -80,36 +80,6 @@ declare const client: {
     };
 } & {
     api: {
-        auth: {
-            test: import("hono/client").ClientRequest<{
-                $post: {
-                    input: {};
-                    output: {
-                        message: string;
-                    };
-                    outputFormat: "json";
-                    status: 401;
-                } | {
-                    input: {};
-                    output: {
-                        message: string;
-                        token: string;
-                    };
-                    outputFormat: "json";
-                    status: import("hono/utils/http-status").ContentfulStatusCode;
-                } | {
-                    input: {};
-                    output: {
-                        message: string;
-                    };
-                    outputFormat: "json";
-                    status: 500;
-                };
-            }>;
-        };
-    };
-} & {
-    api: {
         transaction: import("hono/client").ClientRequest<{
             $get: {
                 input: {};

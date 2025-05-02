@@ -1,4 +1,3 @@
-import logout from '@/services/authService';
 import { useUserStore } from '@/zustand/userStore';
 
 import {
@@ -12,6 +11,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { logout } from '@/services/authService';
 
 export default function Logout({ children }: { children: React.ReactNode }) {
   const setUser = useUserStore((state) => state.setUser);

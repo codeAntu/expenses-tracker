@@ -1,20 +1,24 @@
+import { FC, useEffect, useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tilt } from '@/components/ui/tilt';
-import { useEffect, useState } from 'react';
 import { AnimatedNumber } from '../ui/animated-number';
-import Box from '../box';
-import { Home } from 'lucide-react';
+import { Briefcase, Calendar, Home, PiggyBank, Plus, Target } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import { Button } from '../ui/button';
+import { cn } from '@/lib/utils';
 
-export default function Left() {
+const Left: FC = () => {
   return (
-    <div className='flex flex-col gap-5 border-r'>
-      <TiltCard1 />
-      <Goals />
+    <div className='h-full'>
+      <div className='flex flex-col gap-6 p-4 md:p-6'>
+        <MoneyCard />
+        <GoalsSection />
+      </div>
     </div>
   );
-}
+};
 
-export function TiltCard1() {
+const MoneyCard: FC = () => {
   const [value, setValue] = useState(0);
 
   useEffect(() => {
@@ -22,15 +26,21 @@ export function TiltCard1() {
   }, []);
 
   return (
-    <Tilt rotationFactor={1} isRevese className='flex items-center justify-center border-b p-8'>
-      <div className='bg-accent border-foreground/5 aspect-video w-full max-w-[400px] min-w-[340px] sm:min-w-[400px] flex-col items-center justify-center overflow-hidden rounded-xl border p-5'>
-        <div className='flex h-full w-full flex-col justify-start'>
-          <div className='text-accent-foreground/50 text-xl font-bold'>Total Money</div>
-          <div className='flex h-full items-center justify-center space-x-2 px-10 py-10 text-zinc-800 dark:text-zinc-50'>
-            <div className='inline-flex items-center font-mono text-5xl font-bold'>
-              <span>&#8377;</span>
+    <Tilt rotationFactor={0.5} className='cursor-pointer'>
+      <Card className="bg-gradient-to-br from-primary/90 to-primary/70 text-primary-foreground overflow-hidden">
+        <CardContent className="p-6">
+          <div className="absolute -top-6 -right-6 h-24 w-24 rounded-full bg-white/10 blur-xl" />
+          <div className="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-white/10 blur-xl" />
+          
+          <div className="relative z-10 space-y-4">
+            <div className="flex items-center justify-between">
+              <p className="text-xl font-medium opacity-80">Total Balance</p>
+              <PiggyBank className="h-6 w-6 opacity-80" />
+            </div>
+            
+            <div className="flex items-baseline gap-1 font-mono text-5xl font-bold">
+              <span>₹</span>
               <AnimatedNumber
-                className=''
                 springOptions={{
                   bounce: 0,
                   duration: 1500,
@@ -38,62 +48,141 @@ export function TiltCard1() {
                 value={value}
               />
             </div>
+            
+            <div className="flex items-center justify-between pt-2">
+              <div className="flex items-center gap-2">
+                <Button size="sm" variant="secondary" className="rounded-full bg-white/20 hover:bg-white/30">
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add Funds
+                </Button>
+              </div>
+              <div className="flex items-center gap-1 text-sm">
+                <span className="text-green-300">↑ 12.5%</span>
+                <span className="opacity-70">this month</span>
+              </div>
+            </div>
           </div>
-          {/* <div className='text-accent-foreground/50 text-xl font-bold'></div> */}
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </Tilt>
   );
+};
+
+const GoalsSection: FC = () => {
+  return (
+    <Card className="shadow-md hover:shadow-lg transition-shadow min-w-sm max-w-lg">
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
+        <CardTitle className="text-xl font-bold">Financial Goals</CardTitle>
+        <Button variant="ghost" size="sm" className="text-primary">
+          See All
+        </Button>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          <Goal 
+            icon={<Home className="text-blue-500" />} 
+            name="New Home" 
+            description="Down payment for dream house"
+            current={3000}
+            target={4000}
+            daysLeft={12}
+            iconBg="bg-blue-500/20"
+          />
+          
+          <Goal 
+            icon={<Briefcase className="text-purple-500" />} 
+            name="Emergency Fund" 
+            description="3 months of expenses"
+            current={5000}
+            target={10000}
+            daysLeft={45}
+            iconBg="bg-purple-500/20"
+          />
+          
+          <Goal 
+            icon={<Calendar className="text-green-500" />} 
+            name="Vacation" 
+            description="Summer trip to Bali"
+            current={1200}
+            target={2500}
+            daysLeft={90}
+            iconBg="bg-green-500/20"
+          />
+          
+          <Goal 
+            icon={<Target className="text-orange-500" />} 
+            name="Retirement" 
+            description="Long-term savings"
+            current={50000}
+            target={200000}
+            daysLeft={365}
+            iconBg="bg-orange-500/20"
+          />
+          
+          <Button variant="outline" className="w-full mt-2">
+            <Plus className="h-4 w-4 mr-1" />
+            Add New Goal
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+interface GoalProps {
+  icon: React.ReactNode;
+  name: string;
+  description: string;
+  current: number;
+  target: number;
+  daysLeft: number;
+  iconBg: string;
 }
 
-const Goals = () => {
+const Goal: FC<GoalProps> = ({ 
+  icon, 
+  name, 
+  description, 
+  current, 
+  target, 
+  daysLeft,
+  iconBg
+}) => {
+  const [progress, setProgress] = useState(0);
+  const percentage = Math.round((current / target) * 100);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setProgress(percentage), 500);
+    return () => clearTimeout(timer);
+  }, [percentage]);
+
   return (
-    <div className='grid gap-3 border-l px-3 sm:p-7 pt-4 pb-6'>
-      <div className='flex items-center justify-between px-1'>
-        <div className='text-secondary-foreground/90 flex items-center gap-2 pb-0.5 text-lg font-semibold'>Goals</div>
-        <div className='rounded-sm px-4 py-1 text-sm font-semibold text-blue-500 hover:bg-blue-500/10 hover:text-blue-500'>
-          See All
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className={cn("p-2 rounded-lg", iconBg)}>
+            {icon}
+          </div>
+          <div>
+            <div className="font-medium">{name}</div>
+            <div className="text-xs text-muted-foreground">{description}</div>
+          </div>
+        </div>
+        <div className="text-right">
+          <div className={cn(
+            "text-sm font-medium",
+            daysLeft < 15 ? "text-red-500" : "text-amber-500"
+          )}>
+            {daysLeft} days left
+          </div>
+          <div className="text-xs text-muted-foreground">
+            ₹{current.toLocaleString()} / ₹{target.toLocaleString()}
+          </div>
         </div>
       </div>
-      <div className='flex flex-col gap-3.5'>
-        {/* {transactions.map((transaction) => (
-          <Transaction key={transaction.id} transaction={transaction} />
-        ))} */}
-        <Goal />
-        <Goal />
-        <Goal />
-        <Goal />
-      </div>
+      <Progress value={progress} className="h-2 rounded-full" />
     </div>
   );
 };
 
-const Goal = () => {
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setProgress(66), 500);
-    return () => clearTimeout(timer);
-  }, []);
-
-  return (
-    <Box className='space-y-3'>
-      <div className='flex w-full items-center justify-between'>
-        <div className='flex items-center gap-3'>
-          <Home className='rounded-2xl bg-blue-400/50 p-3' size={50} />
-          <div>
-            <div className='text-accent-foreground/90 text-base font-semibold'>Name </div>
-            <div className='text-accent-foreground/70 line-clamp-1 text-xs font-semibold'>Description</div>
-          </div>
-        </div>
-        <div className='flex flex-col items-end'>
-          <div className='text-sm font-semibold text-red-500/80'>12 days left</div>
-          <div className='text-accent-foreground/70 text-xsm font-semibold'>3000 / 4000</div>
-        </div>
-      </div>
-      <div className='w-full'>
-        <Progress value={progress} className='rounded-2xl' />
-      </div>
-    </Box>
-  );
-};
+export default Left;

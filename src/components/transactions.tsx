@@ -1,4 +1,9 @@
+import { Filter, PlusCircle, Search } from 'lucide-react';
+import { FC } from 'react';
 import Transaction from './transaction';
+import { Button } from './ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Input } from './ui/input';
 
 export const transactions = [
   {
@@ -63,29 +68,50 @@ export const transactions = [
   },
 ];
 
-function Transactions({ date } = { date: new Date() }) {
+const Transactions: FC<{ date?: Date }> = ({ date = new Date() }) => {
   const formattedDate = date.toLocaleDateString('en-US', {
     day: '2-digit',
     month: 'short',
+    year: 'numeric',
   });
 
   return (
-    <div className='grid gap-3 border-l px-5 pt-4 pb-6'>
-      <div className='flex items-center justify-between px-1'>
-        <div className='text-secondary-foreground/90 flex items-center gap-2 pb-0.5 text-lg font-semibold'>
-          Transactions
+    <Card className='max-w-md min-w-sm shadow-md transition-shadow hover:shadow-lg'>
+      <CardHeader className='pb-2'>
+        <div className='flex items-center justify-between'>
+          <CardTitle className='text-xl font-bold'>Recent Transactions</CardTitle>
+          <div className='flex items-center gap-2'>
+            <Button variant='outline' size='sm' className='h-8 text-xs'>
+              <Filter className='mr-1 h-3.5 w-3.5' />
+              Filter
+            </Button>
+            <Button variant='outline' size='sm' className='h-8 text-xs'>
+              {formattedDate}
+            </Button>
+          </div>
         </div>
-        <div className='rounded-sm px-4 py-1 text-sm font-semibold text-blue-500 hover:bg-blue-500/10 hover:text-blue-500'>
-          {formattedDate}
+
+        <div className='mt-2 flex items-center gap-2'>
+          <div className='relative flex-1'>
+            <Search className='text-muted-foreground absolute top-2.5 left-2 h-4 w-4' />
+            <Input placeholder='Search transactions...' className='pl-8' />
+          </div>
+          <Button size='sm' className='h-10'>
+            <PlusCircle className='mr-1 h-4 w-4' />
+            New
+          </Button>
         </div>
-      </div>
-      <div className='flex flex-col gap-3.5 lg:grid sm:grid-cols-2 sm:gap-4 xl:flex'>
-        {transactions.map((transaction) => (
-          <Transaction key={transaction.id} transaction={transaction} />
-        ))}
-      </div>
-    </div>
+      </CardHeader>
+
+      <CardContent>
+        <div className='flex flex-col gap-3.5'>
+          {transactions.map((transaction) => (
+            <Transaction key={transaction.id} transaction={transaction} />
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
-}
+};
 
 export default Transactions;

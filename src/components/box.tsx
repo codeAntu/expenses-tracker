@@ -4,7 +4,7 @@ export default function Box(props: { children?: React.ReactNode; className?: str
   return (
     <div
       className={cn(
-        'bg-secondary/70 border-foreground/5 inline-flex flex-col items-center justify-center overflow-hidden rounded-xl border p-5',
+        'bg-card border-border flex flex-col rounded-lg border shadow-sm',
         props.className,
       )}
     >
