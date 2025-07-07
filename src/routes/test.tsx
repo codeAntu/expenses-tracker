@@ -42,24 +42,24 @@ function RouteComponent() {
     }
   }
 
-  async function getMe() {
-    try {
-      const response = await client.api.auth.test.$post(
-        {},
-        {
-          headers: {
-            Authorization: `Bearer Token`,
-          },
-        },
-      );
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error('Error fetching data with token:', error);
-    }
-  }
+  // async function getMe() {
+  //   try {
+  //     const response = await client.api.auth.test.$post(
+  //       {},
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer Token`,
+  //         },
+  //       },
+  //     );
+  //     const data = await response.json();
+  //     console.log(data);
+  //   } catch (error) {
+  //     console.error('Error fetching data with token:', error);
+  //   }
+  // }
 
-  console.log(user);
+  // console.log(user);
 
   return (
     <div>
@@ -67,7 +67,7 @@ function RouteComponent() {
         <Button>Logout</Button>
       </Logout>
       <Button onClick={sendIdToken}>Send Token</Button>
-      <Button onClick={getMe}>Get Me</Button>
+      {/* <Button onClick={getMe}>Get Me</Button> */}
 
       {user ? (
         <div>
