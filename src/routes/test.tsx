@@ -1,14 +1,9 @@
 import { Button } from '@/components/ui/button';
 import client from '@/utils/client';
 import { useMutation } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 
-export const Route = createFileRoute('/test')({
-  component: RouteComponent,
-});
-
-function RouteComponent() {
+function Test() {
   const [message, setMessage] = useState('');
 
   const testApiMutation = useMutation({
@@ -28,3 +23,5 @@ function RouteComponent() {
     </div>
   );
 }
+
+export default Test;

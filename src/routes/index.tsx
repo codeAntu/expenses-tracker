@@ -2,11 +2,6 @@ import AddAmount from '@/components/addAmount';
 import Left from '@/components/home/left';
 import Mid from '@/components/home/mid';
 import Right from '@/components/home/right';
-import { createFileRoute } from '@tanstack/react-router';
-
-export const Route = createFileRoute('/')({
-  component: App,
-});
 
 function App() {
   return (
@@ -17,7 +12,7 @@ function App() {
           <Mid />
         </div>
       </div>
-        <Right />
+      <Right />
       <div className='fixed right-4 bottom-4 z-50 sm:right-10 sm:bottom-10'>
         <AddAmount />
       </div>
