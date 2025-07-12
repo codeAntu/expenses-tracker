@@ -1,22 +1,59 @@
-import { BrowserRouter, Route, Routes } from 'react-router';
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router';
+import { ProtectedRoute, UnprotectedRoute } from './components/ProtectedRoute';
+import { ThemeProvider } from './components/theme-provider';
+import Index from './routes';
 import LoginPage from './routes/auth/Login';
 import SignupPage from './routes/auth/Signup';
 import VerifyPage from './routes/auth/Verify';
 import Test from './routes/test';
-import Index from './routes';
+
+const router = createBrowserRouter([
+  {
+    element: (
+      <ProtectedRoute>
+        <Outlet />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        path: '/',
+        element: <Index />,
+      },
+      {
+        path: '/test',
+        element: <Test />,
+      },
+    ],
+  },
+  {
+    element: (
+      <UnprotectedRoute>
+        <Outlet />
+      </UnprotectedRoute>
+    ),
+    children: [
+      {
+        path: '/login',
+        element: <LoginPage />,
+      },
+      {
+        path: '/signup',
+        element: <SignupPage />,
+      },
+      {
+        path: '/verify',
+        element: <VerifyPage />,
+      },
+    ],
+  },
+]);
 
 const App = () => {
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<Index />} />
-          <Route path='/test' element={<Test />} />
-          <Route path='/login' element={<LoginPage />} />
-          <Route path='/signup' element={<SignupPage />} />
-          <Route path='/verify' element={<VerifyPage />} />
-        </Routes>
-      </BrowserRouter>
+      <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
+        <RouterProvider router={router} />
+      </ThemeProvider>
     </>
   );
 };

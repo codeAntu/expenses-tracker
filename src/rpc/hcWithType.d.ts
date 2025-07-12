@@ -158,6 +158,44 @@ declare const client: {
     };
 } & {
     api: {
+        auth: {
+            "forgot-password": import("hono/client").ClientRequest<{
+                $post: {
+                    input: {};
+                    output: {
+                        success: boolean;
+                        statusCode: number;
+                        message: string;
+                        error: string;
+                        timestamp: string;
+                    };
+                    outputFormat: "json";
+                    status: import("hono/utils/http-status").ContentfulStatusCode;
+                };
+            }>;
+        };
+    };
+} & {
+    api: {
+        auth: {
+            "reset-password": import("hono/client").ClientRequest<{
+                $post: {
+                    input: {};
+                    output: {
+                        success: boolean;
+                        statusCode: number;
+                        message: string;
+                        error: string;
+                        timestamp: string;
+                    };
+                    outputFormat: "json";
+                    status: import("hono/utils/http-status").ContentfulStatusCode;
+                };
+            }>;
+        };
+    };
+} & {
+    api: {
         api: {
             transaction: import("hono/client").ClientRequest<{
                 $get: {
