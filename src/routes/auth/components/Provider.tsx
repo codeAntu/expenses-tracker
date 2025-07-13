@@ -15,7 +15,7 @@ const Provider = () => {
             fill='currentColor'
           />
         </svg>
-        Login with Apple
+        Login with Github
       </Button>
       <Button variant='outline' className='w-full' onClick={() => signInWithProvider(googleProvider)}>
         <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>

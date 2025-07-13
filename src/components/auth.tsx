@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { signInWithEmail, signInWithProvider, signUpWithEmail } from '@/services/authService';
+import signInWithEmail, { signInWithProvider, signUpWithEmail } from '@/services/authService';
 import { useMutation } from '@tanstack/react-query';
 import { GithubAuthProvider, GoogleAuthProvider } from 'firebase/auth';
 import { AtSign, Github } from 'lucide-react';

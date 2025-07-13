@@ -19,6 +19,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
   logout: () => {
     set({ isAuthenticated: false, token: null });
+    setAuthToken('');
     LS.removeItem('token');
   },
 }));

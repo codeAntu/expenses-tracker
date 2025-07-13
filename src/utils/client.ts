@@ -5,7 +5,9 @@ import hcWithType from '@/rpc/hcWithType';
 // import { hc } from 'hono/client';
 import { hc } from '../../node_modules/hono/dist/client/client';
 
-const address = 'http://localhost:3000';
+const isProduction = import.meta.env.MODE === 'production';
+
+const address = isProduction ? 'https://expenses-tracker-backend-one.vercel.app/' : 'http://localhost:3000/';
 
 const client = (hc as typeof hcWithType)(address);
 

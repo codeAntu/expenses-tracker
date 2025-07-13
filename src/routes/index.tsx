@@ -12,11 +12,15 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useTheme } from '@/components/theme-provider';
+import Logout from '@/components/logout';
 
 function Index() {
   return (
     <div className='flex min-h-[calc(100dvh-8rem)] w-full flex-col xl:flex-row'>
       <ModeToggle />
+      <Logout>
+        <Button variant='outline'>Logout</Button>
+      </Logout>
       <div className='flex flex-1 flex-col md:flex-row'>
         <Left />
         <div className='max-h-screen w-full overflow-y-auto md:w-2/3 xl:w-3/4'>

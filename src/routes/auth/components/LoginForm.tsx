@@ -3,10 +3,37 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
-import { Link } from 'react-router';
+import signInWithEmail from '@/services/authService';
+import { useMutation } from '@tanstack/react-query';
+import { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router';
 import Provider from './Provider';
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
+  const location = useLocation();
+  const [email, setEmail] = useState(() => location.state?.email || '');
+  const [password, setPassword] = useState(() => location.state?.password || '');
+  const navigate = useNavigate();
+
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationFn: (data: { email: string; password: string }) => signInWithEmail(data.email, data.password),
+    onSuccess: (res) => {
+      if (res?.haveToVerify) {
+        navigate('/verify', {
+          state: {
+            message: res.message,
+            email,
+          },
+        });
+      }
+    },
+  });
+
+  function handleLogin(e: React.FormEvent) {
+    e.preventDefault();
+    mutate({ email, password });
+  }
+
   return (
     <div className={cn('flex min-w-sm flex-col gap-6', className)} {...props}>
       <Card>
@@ -15,16 +42,23 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
           <CardDescription>Login with your Apple or Google account</CardDescription>
         </CardHeader>
         <CardContent>
-          <>
+          <form onSubmit={handleLogin}>
             <div className='grid gap-6'>
-              <Provider/>
+              <Provider />
               <div className='after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t'>
                 <span className='bg-background text-muted-foreground relative z-10 px-2'>Or continue with</span>
               </div>
               <div className='grid gap-6'>
                 <div className='grid gap-2'>
                   <Label htmlFor='email'>Email</Label>
-                  <Input id='email' type='email' placeholder='m@example.com' required />
+                  <Input
+                    id='email'
+                    type='email'
+                    placeholder='m@example.com'
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
                 </div>
                 <div className='grid gap-2'>
                   <div className='flex items-center'>
@@ -33,20 +67,29 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                       Forgot your password?
                     </a>
                   </div>
-                  <Input id='password' type='password' required />
+                  <Input
+                    id='password'
+                    type='password'
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
                 </div>
-                <Button type='submit' className='w-full'>
-                  Login
+                <Button type='submit' className='w-full' disabled={isPending}>
+                  {isPending ? 'Logging in...' : 'Login'}
                 </Button>
-              </div>
-              <div className='text-center text-sm'>
-                Don&apos;t have an account?{' '}
-                <Link to='/signup' className='underline underline-offset-4'>
-                  Sign up
-                </Link>
+                {isError && (
+                  <div className='text-center text-sm text-red-600'>{(error as Error)?.message || 'Login failed.'}</div>
+                )}
+                <div className='text-center text-sm'>
+                  Don&apos;t have an account?{' '}
+                  <Link to='/signup' className='underline underline-offset-4' state={{ email, password }}>
+                    Sign up
+                  </Link>
+                </div>
               </div>
             </div>
-          </>
+          </form>
         </CardContent>
       </Card>
       <div className='text-muted-foreground [&_a]:hover:text-primary text-center text-xs text-balance [&_a]:underline [&_a]:underline-offset-4'>

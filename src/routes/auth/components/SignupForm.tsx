@@ -3,10 +3,37 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
-import { Link } from 'react-router';
+import { signUpWithEmail } from '@/services/authService';
+import { useMutation } from '@tanstack/react-query';
+import { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router';
 import Provider from './Provider';
 
 export function SignupForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
+  const location = useLocation();
+  const [email, setEmail] = useState(() => location.state?.email || '');
+  const [password, setPassword] = useState(() => location.state?.password || '');
+  const navigate = useNavigate();
+
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationFn: (data: { email: string; password: string }) => signUpWithEmail(data.email, data.password),
+    onSuccess: (res) => {
+      if (res.haveToVerify) {
+        navigate('/verify', {
+          state: {
+            message: res.message,
+            email,
+          },
+        });
+      }
+    },
+  });
+
+  function handleSignup(e: React.FormEvent) {
+    e.preventDefault();
+    mutate({ email, password });
+  }
+
   return (
     <div className={cn('flex min-w-sm flex-col gap-6', className)} {...props}>
       <Card>
@@ -15,35 +42,47 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
           <CardDescription>Sign up with your email and password</CardDescription>
         </CardHeader>
         <CardContent>
-          <>
+          <form onSubmit={handleSignup}>
             <div className='grid gap-6'>
               <Provider />
               <div className='after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t'>
                 <span className='bg-background text-muted-foreground relative z-10 px-2'>Or continue with</span>
               </div>
               <div className='grid gap-2'>
-                <Label htmlFor='name'>Name</Label>
-                <Input id='name' type='text' placeholder='Your name' required />
-              </div>
-              <div className='grid gap-2'>
                 <Label htmlFor='email'>Email</Label>
-                <Input id='email' type='email' placeholder='m@example.com' required />
+                <Input
+                  id='email'
+                  type='email'
+                  placeholder='m@example.com'
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </div>
               <div className='grid gap-2'>
                 <Label htmlFor='password'>Password</Label>
-                <Input id='password' type='password' required />
+                <Input
+                  id='password'
+                  type='password'
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </div>
-              <Button type='submit' className='w-full'>
-                Sign up
+              <Button type='submit' className='w-full' disabled={isPending}>
+                {isPending ? 'Signing up...' : 'Sign up'}
               </Button>
+              {isError && (
+                <div className='text-center text-sm text-red-600'>{(error as Error)?.message || 'Signup failed.'}</div>
+              )}
               <div className='text-center text-sm'>
                 Already have an account?{' '}
-                <Link to='/login' className='underline underline-offset-4'>
+                <Link to='/login' className='underline underline-offset-4' state={{ email, password }}>
                   Login
                 </Link>
               </div>
             </div>
-          </>
+          </form>
         </CardContent>
       </Card>
       <div className='text-muted-foreground [&_a]:hover:text-primary text-center text-xs text-balance [&_a]:underline [&_a]:underline-offset-4'>
