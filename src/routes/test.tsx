@@ -1,3 +1,4 @@
+import { Auth } from '@/components/auth';
 import { Button } from '@/components/ui/button';
 import client from '@/utils/client';
 import { useMutation } from '@tanstack/react-query';
@@ -20,6 +21,9 @@ function Test() {
     <div>
       <Button onClick={() => testApiMutation.mutate()}>Test</Button>
       {message && <div>API Response: {message}</div>}
+      <Auth>
+        <div>login</div>
+      </Auth>
     </div>
   );
 }

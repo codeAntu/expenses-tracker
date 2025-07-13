@@ -55,137 +55,15 @@ declare const client: {
                         success: boolean;
                         statusCode: number;
                         message: string;
-                        error: string;
-                        timestamp: string;
-                    };
-                    outputFormat: "json";
-                    status: 401;
-                } | {
-                    input: {
-                        form: {
-                            idToken: string;
-                        };
-                    };
-                    output: {
-                        message: string;
-                        user: {
+                        data: {
                             id: string;
                             name: string;
                             email: string;
                             totalAmount: string;
                             picture: string;
                             token: string;
-                        };
-                    };
-                    outputFormat: "json";
-                    status: 200;
-                };
-            }>;
-        };
-    };
-} & {
-    api: {
-        auth: {
-            login: import("hono/client").ClientRequest<{
-                $post: {
-                    input: {
-                        form: {
-                            email: string;
-                            password: string;
-                        };
-                    };
-                    output: {
-                        success: boolean;
-                        statusCode: number;
-                        message: string;
-                        error: string;
-                        timestamp: string;
-                    };
-                    outputFormat: "json";
-                    status: import("hono/utils/http-status").ContentfulStatusCode;
-                };
-            }>;
-        };
-    };
-} & {
-    api: {
-        auth: {
-            signup: import("hono/client").ClientRequest<{
-                $post: {
-                    input: {
-                        form: {
-                            name: string;
-                            email: string;
-                            password: string;
-                        };
-                    };
-                    output: {
-                        success: boolean;
-                        statusCode: number;
-                        message: string;
-                        error: string;
-                        timestamp: string;
-                    };
-                    outputFormat: "json";
-                    status: import("hono/utils/http-status").ContentfulStatusCode;
-                };
-            }>;
-        };
-    };
-} & {
-    api: {
-        auth: {
-            verify: import("hono/client").ClientRequest<{
-                $post: {
-                    input: {
-                        form: {
-                            email: string;
-                            otp: string;
-                        };
-                    };
-                    output: {
-                        success: boolean;
-                        statusCode: number;
-                        message: string;
-                        error: string;
-                        timestamp: string;
-                    };
-                    outputFormat: "json";
-                    status: import("hono/utils/http-status").ContentfulStatusCode;
-                };
-            }>;
-        };
-    };
-} & {
-    api: {
-        auth: {
-            "forgot-password": import("hono/client").ClientRequest<{
-                $post: {
-                    input: {};
-                    output: {
-                        success: boolean;
-                        statusCode: number;
-                        message: string;
-                        error: string;
-                        timestamp: string;
-                    };
-                    outputFormat: "json";
-                    status: import("hono/utils/http-status").ContentfulStatusCode;
-                };
-            }>;
-        };
-    };
-} & {
-    api: {
-        auth: {
-            "reset-password": import("hono/client").ClientRequest<{
-                $post: {
-                    input: {};
-                    output: {
-                        success: boolean;
-                        statusCode: number;
-                        message: string;
-                        error: string;
+                        } | null;
+                        error: string | null;
                         timestamp: string;
                     };
                     outputFormat: "json";

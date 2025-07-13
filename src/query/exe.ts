@@ -1,4 +1,3 @@
-
 export function setAuthToken(t?: string): void {
   console.log('token', t);
 }

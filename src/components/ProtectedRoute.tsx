@@ -4,9 +4,6 @@ import { Navigate } from 'react-router';
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
-  console.log('ProtectedRoute isAuthenticated:', isAuthenticated);
-
-
   if (!isAuthenticated) {
     return <Navigate to='/login' replace />;
   }

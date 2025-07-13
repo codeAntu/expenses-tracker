@@ -1,5 +1,3 @@
-import { useUserStore } from '@/zustand/userStore';
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,8 +12,6 @@ import {
 import { logout } from '@/services/authService';
 
 export default function Logout({ children }: { children: React.ReactNode }) {
-  const setUser = useUserStore((state) => state.setUser);
-
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
@@ -28,7 +24,6 @@ export default function Logout({ children }: { children: React.ReactNode }) {
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
             onClick={() => {
-              setUser(null);
               logout();
             }}
             className='bg-red-500 hover:bg-red-600'

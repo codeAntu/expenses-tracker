@@ -1,4 +1,5 @@
 import app from '@/firebase/firebaseConfig';
+import client from '@/utils/client';
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -8,6 +9,8 @@ import {
   signInWithPopup,
 } from 'firebase/auth';
 import { z } from 'zod';
+import { useAuthStore } from '@/zustand/authStore';
+import { exe } from '@/query/exe';
 
 const auth = getAuth(app);
 
@@ -15,6 +18,28 @@ const User = z.object({
   email: z.string().email(),
   password: z.string().min(8),
 });
+
+async function loginInDatabase(idToken: string) {
+  try {
+    const res = await (
+      await client.api.auth.firebase.$post({
+        form: { idToken },
+      })
+    ).json();
+
+    // TODO: Add sonner
+    if (!res.success) {
+      throw new Error(res.message || 'Login failed');
+    }
+    const token = res.data?.token || null;
+    useAuthStore.getState().setToken(token);
+    exe();
+    console.log(res.data);
+  } catch (error) {
+    console.error('Error logging in user:', error);
+    return null;
+  }
+}
 
 export async function signInWithEmail(email: string, password: string) {
   console.log('Signing in with email and password');
@@ -45,9 +70,8 @@ export async function signUpWithEmail(email: string, password: string) {
 export async function signInWithProvider(provider: GoogleAuthProvider | GithubAuthProvider) {
   try {
     const userCredential = await signInWithPopup(auth, provider);
-    const user = userCredential.user;
-
-    console.log('User:', user);
+    const idToken = await userCredential.user.getIdToken();
+    await loginInDatabase(idToken);
   } catch (error) {
     return error;
   }

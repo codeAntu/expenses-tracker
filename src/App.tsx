@@ -19,10 +19,6 @@ const router = createBrowserRouter([
         path: '/',
         element: <Index />,
       },
-      {
-        path: '/test',
-        element: <Test />,
-      },
     ],
   },
   {
@@ -46,6 +42,7 @@ const router = createBrowserRouter([
       },
     ],
   },
+  { path: '/test', element: <Test /> },
 ]);
 
 const App = () => {
