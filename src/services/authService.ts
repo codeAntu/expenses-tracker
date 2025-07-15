@@ -20,29 +20,59 @@ const User = z.object({
   password: z.string().min(8),
 });
 
-export async function checkVerification() {
+interface ResType {
+  success: boolean;
+  message: string;
+  haveToVerify?: boolean;
+  data?: any;
+  error?: unknown;
+}
+
+export async function checkVerification(): Promise<ResType> {
   try {
     const user = auth.currentUser;
-    console.log('Checking user verification status:', user);
-
-    await user?.reload(); // Await reload to ensure latest info
-    console.log('Checking user verification status:', user);
-
+    await user?.reload();
     if (user?.emailVerified) {
-      console.log('User is verified:', user.email);
-      await loginInDatabase(await user.getIdToken(true));
-      return true;
+      const idToken = await user.getIdToken(true);
+      return await loginInDatabase(idToken);
     } else {
-      if (user) await sendEmailVerification(user);
-      return false;
+      return {
+        success: false,
+        message: 'Email not verified',
+        haveToVerify: true,
+      };
     }
   } catch (error) {
     console.error('Error in checkVerification:', error);
-    return false;
+    return {
+      success: false,
+      message: (error as Error).message || 'Error checking verification',
+      error,
+    };
   }
 }
 
-async function loginInDatabase(idToken: string) {
+export async function resendVerificationEmail() {
+  try {
+    const user = auth.currentUser;
+    if (!user) {
+      throw new Error('No user is currently signed in');
+    }
+    await sendEmailVerification(user);
+    return {
+      success: true,
+      message: 'Verification email sent. Please check your inbox.',
+    };
+  } catch (error) {
+    console.error('Error sending verification email:', error);
+    return {
+      success: false,
+      message: (error as Error).message || 'Failed to send verification email',
+    };
+  }
+}
+
+async function loginInDatabase(idToken: string): Promise<ResType> {
   try {
     const res = await (
       await client.api.auth.firebase.$post({
@@ -50,26 +80,28 @@ async function loginInDatabase(idToken: string) {
       })
     ).json();
 
-    // TODO: Add sonner
     if (!res.success) {
-      throw new Error(res.message || 'Login failed');
+      return res;
     }
     const token = res.data?.token || null;
     useAuthStore.getState().setToken(token);
     exe();
-    console.log(res.data);
+    return {
+      success: true,
+      message: 'User logged in successfully',
+      data: res.data,
+    };
   } catch (error) {
-    console.error('Error logging in user:', error);
-    return null;
+    return {
+      success: false,
+      message: 'Failed to log in to database',
+      error,
+    } as ResType;
   }
 }
 
-export default async function signInWithEmail(
-  email: string,
-  password: string,
-): Promise<{ haveToVerify: true; message: string } | any> {
+export default async function signInWithEmail(email: string, password: string): Promise<ResType | undefined> {
   try {
-    console.log('Signing in with email and password');
     const validatedUser = User.safeParse({ email, password });
     if (!validatedUser.success) {
       throw new Error(validatedUser.error.errors[0].message);
@@ -79,6 +111,7 @@ export default async function signInWithEmail(
     if (!user.emailVerified) {
       await sendEmailVerification(user);
       return {
+        success: false,
         haveToVerify: true,
         message: 'Verification email sent. Please check your inbox.',
       };
@@ -90,10 +123,7 @@ export default async function signInWithEmail(
   }
 }
 
-export async function signUpWithEmail(
-  email: string,
-  password: string,
-): Promise<{ haveToVerify: boolean; message: string }> {
+export async function signUpWithEmail(email: string, password: string): Promise<ResType> {
   const validatedUser = User.safeParse({ email, password });
   if (!validatedUser.success) {
     throw new Error(validatedUser.error.errors[0].message);
@@ -105,29 +135,47 @@ export async function signUpWithEmail(
     await sendEmailVerification(user);
 
     return {
+      success: true,
       haveToVerify: true,
       message: 'Verification email sent. Please check your inbox.',
     };
   } catch (error: unknown) {
     return {
+      success: false,
       haveToVerify: false,
       message: (error as Error).message || 'An error occurred during sign up',
+      error,
     };
   }
 }
 
-export async function signInWithProvider(provider: GoogleAuthProvider | GithubAuthProvider) {
+export async function signInWithProvider(provider: GoogleAuthProvider | GithubAuthProvider): Promise<ResType> {
   try {
     const userCredential = await signInWithPopup(auth, provider);
     const idToken = await userCredential.user.getIdToken();
-    await loginInDatabase(idToken);
+    return await loginInDatabase(idToken);
   } catch (error) {
-    return error;
+    return {
+      success: false,
+      message: (error as Error).message || 'Provider login failed',
+      error,
+    };
   }
 }
 
-export async function logout() {
-  await auth.signOut();
-  useAuthStore.getState().logout();
-  console.log('User signed out');
+export async function logoutFn(): Promise<ResType> {
+  try {
+    await auth.signOut();
+    useAuthStore.getState().logout();
+    return {
+      success: true,
+      message: 'User signed out successfully',
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: (error as Error).message || 'Logout failed',
+      error,
+    };
+  }
 }

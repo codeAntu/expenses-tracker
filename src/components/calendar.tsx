@@ -12,7 +12,6 @@ export default function Calendar({
   const [key, setKey] = useState(0);
 
   useEffect(() => {
-    console.log('date', date);
     setKey((prev) => prev + 1);
   }, [date]);
 

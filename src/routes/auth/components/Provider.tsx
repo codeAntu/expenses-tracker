@@ -9,12 +9,12 @@ const Provider = () => {
   const githubProvider = new GithubAuthProvider();
 
   const githubMutation = useMutation({
-    mutationFn: async () => {
-      const result = await signInWithProvider(githubProvider);
-      if (result instanceof Error) throw result;
-      return result;
-    },
-    onSuccess: () => {
+    mutationFn: () => signInWithProvider(githubProvider),
+    onSuccess: (res) => {
+      if (!res?.success) {
+        toast.error(res?.message || 'Github login failed');
+        return;
+      }
       toast.success('Logged in with Github!');
     },
     onError: (error: any) => {
@@ -23,12 +23,12 @@ const Provider = () => {
   });
 
   const googleMutation = useMutation({
-    mutationFn: async () => {
-      const result = await signInWithProvider(googleProvider);
-      if (result instanceof Error) throw result;
-      return result;
-    },
-    onSuccess: () => {
+    mutationFn: async () => signInWithProvider(googleProvider),
+    onSuccess: (res) => {
+      if (!res?.success) {
+        toast.error(res?.message || 'Google login failed');
+        return;
+      }
       toast.success('Logged in with Google!');
     },
     onError: (error: any) => {

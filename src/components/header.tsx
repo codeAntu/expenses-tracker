@@ -1,7 +1,5 @@
 import { Bell, Search as SearchIcon, Wallet } from 'lucide-react';
 import { ModeToggle } from './mode-toggle';
-import { Auth } from './auth';
-import { Button } from './ui/button';
 
 export default function Header() {
   return (
@@ -19,10 +17,6 @@ export default function Header() {
         <div className='bg-secondary/70 hover:bg-secondary/60 border-primary/5 text-secondary-foreground cursor-pointer rounded-full border p-1.5 transition duration-250 md:p-2'>
           <Bell className='h-5 w-5' />
         </div>
-        {/* <Profile /> */}
-        <Auth>
-          <Button variant='outline'>Sign in</Button>
-        </Auth>
       </div>
     </div>
   );

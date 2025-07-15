@@ -3,9 +3,6 @@ import { Navigate } from 'react-router';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const token = useAuthStore((state) => state.token);
-  console.log('token in ProtectedRoute', token);
-
   if (!isAuthenticated) {
     return <Navigate to='/login' replace />;
   }

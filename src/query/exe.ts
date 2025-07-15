@@ -1,5 +1,5 @@
 export function setAuthToken(t?: string): void {
-  console.log('token', t);
+  console.log('exe fun -> token', t);
 }
 
 export function exe() {

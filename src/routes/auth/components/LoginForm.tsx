@@ -19,6 +19,10 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
   const { mutate, isPending } = useMutation({
     mutationFn: (data: { email: string; password: string }) => signInWithEmail(data.email, data.password),
     onSuccess: (res) => {
+      if (!res?.success) {
+        toast.error(res?.message || 'Login failed.');
+        return;
+      }
       if (res?.haveToVerify) {
         navigate('/verify', {
           state: {

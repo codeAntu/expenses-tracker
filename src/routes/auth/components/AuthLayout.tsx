@@ -18,7 +18,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
           </a>
         </div>
         <div className='flex w-full flex-1 items-center justify-center'>
-          <div className='max-w-sm border'>{children}</div>
+          <div className='max-w-sm'>{children}</div>
         </div>
       </div>
       <div className='bg-muted relative hidden lg:block'>

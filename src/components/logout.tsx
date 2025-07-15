@@ -9,18 +9,27 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { logout } from '@/services/authService';
+import { logoutFn } from '@/services/authService';
+import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 export default function Logout({ children }: { children: React.ReactNode }) {
-  async function handleLogout() {
-    try {
-      await logout();
-      toast.success('Logged out successfully');
-    } catch (error) {
-      toast.error('Logout failed. Please try again.');
-      console.error('Logout failed:', error);
-    }
+  const { mutate } = useMutation({
+    mutationFn: async () => await logoutFn(),
+    onSuccess: (res) => {
+      if (res?.success) {
+        toast.success('Logged out successfully');
+      } else {
+        toast.error(res?.message || 'Logout failed. Please try again.');
+      }
+    },
+    onError: (error) => {
+      toast.error((error as Error)?.message || 'Logout failed. Please try again.');
+    },
+  });
+
+  function handleLogout() {
+    mutate();
   }
 
   return (
