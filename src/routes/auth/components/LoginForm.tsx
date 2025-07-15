@@ -42,12 +42,12 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
           <CardDescription>Login with your Apple or Google account</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleLogin}>
-            <div className='grid gap-6'>
-              <Provider />
-              <div className='after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t'>
-                <span className='bg-background text-muted-foreground relative z-10 px-2'>Or continue with</span>
-              </div>
+          <div className='grid gap-6'>
+            <Provider />
+            <div className='after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t'>
+              <span className='bg-background text-muted-foreground relative z-10 px-2'>Or continue with</span>
+            </div>
+            <form onSubmit={handleLogin} className='grid gap-6'>
               <div className='grid gap-6'>
                 <div className='grid gap-2'>
                   <Label htmlFor='email'>Email</Label>
@@ -88,8 +88,8 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                   </Link>
                 </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </CardContent>
       </Card>
       <div className='text-muted-foreground [&_a]:hover:text-primary text-center text-xs text-balance [&_a]:underline [&_a]:underline-offset-4'>

@@ -23,8 +23,8 @@ export default function Logout({ children }: { children: React.ReactNode }) {
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
-            onClick={() => {
-              logout();
+            onClick={async () => {
+              await logout();
             }}
             className='bg-red-500 hover:bg-red-600'
           >
