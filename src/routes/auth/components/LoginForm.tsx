@@ -7,6 +7,7 @@ import signInWithEmail from '@/services/authService';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
+import { toast } from 'sonner';
 import Provider from './Provider';
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
@@ -15,7 +16,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
   const [password, setPassword] = useState(() => location.state?.password || '');
   const navigate = useNavigate();
 
-  const { mutate, isPending, isError, error } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: (data: { email: string; password: string }) => signInWithEmail(data.email, data.password),
     onSuccess: (res) => {
       if (res?.haveToVerify) {
@@ -25,7 +26,13 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
             email,
           },
         });
+        toast.info(res.message || 'Verification email sent. Please check your inbox.');
+      } else {
+        toast.success('Login successful!');
       }
+    },
+    onError: (error) => {
+      toast.error((error as Error)?.message || 'Login failed.');
     },
   });
 
@@ -78,9 +85,6 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                 <Button type='submit' className='w-full' disabled={isPending}>
                   {isPending ? 'Logging in...' : 'Login'}
                 </Button>
-                {isError && (
-                  <div className='text-center text-sm text-red-600'>{(error as Error)?.message || 'Login failed.'}</div>
-                )}
                 <div className='text-center text-sm'>
                   Don&apos;t have an account?{' '}
                   <Link to='/signup' className='underline underline-offset-4' state={{ email, password }}>

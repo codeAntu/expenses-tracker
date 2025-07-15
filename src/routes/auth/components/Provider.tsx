@@ -2,35 +2,37 @@ import { Button } from '@/components/ui/button';
 import { signInWithProvider } from '@/services/authService';
 import { useMutation } from '@tanstack/react-query';
 import { GithubAuthProvider, GoogleAuthProvider } from 'firebase/auth';
-import { useState } from 'react';
+import { toast } from 'sonner';
 
 const Provider = () => {
   const googleProvider = new GoogleAuthProvider();
   const githubProvider = new GithubAuthProvider();
 
-  const [providerError, setProviderError] = useState<string | null>(null);
-
   const githubMutation = useMutation({
     mutationFn: async () => {
-      setProviderError(null);
       const result = await signInWithProvider(githubProvider);
       if (result instanceof Error) throw result;
       return result;
     },
+    onSuccess: () => {
+      toast.success('Logged in with Github!');
+    },
     onError: (error: any) => {
-      setProviderError(error?.message || 'Github login failed');
+      toast.error(error?.message || 'Github login failed');
     },
   });
 
   const googleMutation = useMutation({
     mutationFn: async () => {
-      setProviderError(null);
       const result = await signInWithProvider(googleProvider);
       if (result instanceof Error) throw result;
       return result;
     },
+    onSuccess: () => {
+      toast.success('Logged in with Google!');
+    },
     onError: (error: any) => {
-      setProviderError(error?.message || 'Google login failed');
+      toast.error(error?.message || 'Google login failed');
     },
   });
 
@@ -76,7 +78,6 @@ const Provider = () => {
         )}
         {googleMutation.isPending ? 'Logging in...' : 'Login with Google'}
       </Button>
-      {providerError && <div className='text-center text-sm text-red-600'>{providerError}</div>}
     </div>
   );
 };

@@ -10,8 +10,19 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { logout } from '@/services/authService';
+import { toast } from 'sonner';
 
 export default function Logout({ children }: { children: React.ReactNode }) {
+  async function handleLogout() {
+    try {
+      await logout();
+      toast.success('Logged out successfully');
+    } catch (error) {
+      toast.error('Logout failed. Please try again.');
+      console.error('Logout failed:', error);
+    }
+  }
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
@@ -22,12 +33,7 @@ export default function Logout({ children }: { children: React.ReactNode }) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={async () => {
-              await logout();
-            }}
-            className='bg-red-500 hover:bg-red-600'
-          >
+          <AlertDialogAction onClick={handleLogout} className='bg-red-500 hover:bg-red-600'>
             Logout
           </AlertDialogAction>
         </AlertDialogFooter>

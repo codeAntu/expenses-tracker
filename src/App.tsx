@@ -6,6 +6,7 @@ import LoginPage from './routes/auth/Login';
 import SignupPage from './routes/auth/Signup';
 import VerifyPage from './routes/auth/Verify';
 import Test from './routes/test';
+import { Toaster } from 'sonner';
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,7 @@ const router = createBrowserRouter([
 const App = () => {
   return (
     <>
+      <Toaster richColors />
       <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
         <RouterProvider router={router} />
       </ThemeProvider>
