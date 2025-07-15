@@ -1,24 +1,27 @@
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router';
+import { Toaster } from 'sonner';
 import { ProtectedRoute, UnprotectedRoute } from './components/ProtectedRoute';
+import Layout from './components/layout';
 import { ThemeProvider } from './components/theme-provider';
-import Index from './routes';
 import LoginPage from './routes/auth/Login';
 import SignupPage from './routes/auth/Signup';
 import VerifyPage from './routes/auth/Verify';
-import Test from './routes/test';
-import { Toaster } from 'sonner';
+import Test from './routes/test/test';
+import Home from './routes/Home';
 
 const router = createBrowserRouter([
   {
     element: (
       <ProtectedRoute>
-        <Outlet />
+        <Layout>
+          <Outlet />
+        </Layout>
       </ProtectedRoute>
     ),
     children: [
       {
         path: '/',
-        element: <Index />,
+        element: <Home />,
       },
     ],
   },

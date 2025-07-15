@@ -1,9 +1,9 @@
 import { Calendar as Cal } from '@/components/ui/calendar';
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { FC, useState } from 'react';
+import { Button } from '../../ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card';
 import Transactions from '../transactions';
-import { Button } from '../ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 
 const Right: FC = () => {
   const [date, setDate] = useState<Date>(new Date());

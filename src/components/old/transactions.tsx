@@ -1,9 +1,9 @@
 import { Filter, PlusCircle, Search } from 'lucide-react';
 import { FC } from 'react';
+import { Button } from '../ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Input } from '../ui/input';
 import Transaction from './transaction';
-import { Button } from './ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Input } from './ui/input';
 
 export const transactions = [
   {

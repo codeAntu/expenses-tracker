@@ -1,9 +1,10 @@
-import AddAmount from '@/components/addAmount';
-import Left from '@/components/home/left';
-import Mid from '@/components/home/mid';
-import Right from '@/components/home/right';
+import AddAmount from '@/components/old/addAmount';
+import Left from '@/components/old/home/left';
+import Mid from '@/components/old/home/mid';
+import Right from '@/components/old/home/right';
 import { Moon, Sun } from 'lucide-react';
 
+import Logout from '@/components/logout';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -11,10 +12,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useTheme } from '@/components/theme-provider';
-import Logout from '@/components/logout';
+import { useTheme } from 'next-themes';
+import Content from './components/content';
 
-function Index() {
+function Home() {
+  return (
+    <>
+      <Content />
+    </>
+  );
+
   return (
     <div className='flex min-h-[calc(100dvh-8rem)] w-full flex-col xl:flex-row'>
       <ModeToggle />
@@ -56,4 +63,4 @@ export function ModeToggle() {
   );
 }
 
-export default Index;
+export default Home;
