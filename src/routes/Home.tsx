@@ -1,10 +1,5 @@
-import AddAmount from '@/components/old/addAmount';
-import Left from '@/components/old/home/left';
-import Mid from '@/components/old/home/mid';
-import Right from '@/components/old/home/right';
 import { Moon, Sun } from 'lucide-react';
 
-import Logout from '@/components/logout';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -21,8 +16,6 @@ function Home() {
       <Content />
     </>
   );
-
-  
 }
 
 export function ModeToggle() {

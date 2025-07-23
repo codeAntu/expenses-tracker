@@ -96,6 +96,48 @@ declare const client: {
                 outputFormat: "json";
                 status: 200;
             };
+            $post: {
+                input: {
+                    json: {
+                        name: string;
+                        description: string;
+                        icon?: string | undefined;
+                        color?: string | undefined;
+                    };
+                };
+                output: never;
+                outputFormat: "json";
+                status: 500;
+            } | {
+                input: {
+                    json: {
+                        name: string;
+                        description: string;
+                        icon?: string | undefined;
+                        color?: string | undefined;
+                    };
+                };
+                output: {
+                    success: boolean;
+                    statusCode: number;
+                    message: string;
+                    data: {
+                        id: string;
+                        name: string;
+                        description: string | null;
+                        icon: string;
+                        color: string;
+                        createdAt: string;
+                        updatedAt: string;
+                        balance: string;
+                        userId: string;
+                    } | null;
+                    error: string | null;
+                    timestamp: string;
+                };
+                outputFormat: "json";
+                status: 201;
+            };
         }>;
     };
 } & {

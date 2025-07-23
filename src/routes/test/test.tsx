@@ -1,13 +1,18 @@
 import Logout from '@/components/logout';
 import { Button } from '@/components/ui/button';
 import client from '@/utils/client';
+import { useAuthStore } from '@/zustand/authStore';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 function Test() {
   const [message, setMessage] = useState('');
+  const token = useAuthStore((state) => state.token);
 
+  console.log('Test token:', token);
+
+  // TODO: fix the token issue
   const testApiMutation = useMutation({
     mutationFn: async () => (await client.api.test.new.$post({ input: {} })).json(),
     onSuccess: () => {

@@ -12,8 +12,8 @@ import Provider from './Provider';
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
   const location = useLocation();
-  const [email, setEmail] = useState(() => location.state?.email || '');
-  const [password, setPassword] = useState(() => location.state?.password || '');
+  const [email, setEmail] = useState(() => location.state?.email || 'codeantu@gmail.com');
+  const [password, setPassword] = useState(() => location.state?.password || '12345678');
   const navigate = useNavigate();
 
   const { mutate, isPending } = useMutation({

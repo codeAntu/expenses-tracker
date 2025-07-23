@@ -1,5 +1,4 @@
 import app from '@/firebase/firebaseConfig';
-import { exe } from '@/query/exe';
 import client from '@/utils/client';
 import { useAuthStore } from '@/zustand/authStore';
 import {
@@ -85,7 +84,7 @@ async function loginInDatabase(idToken: string): Promise<ResType> {
     }
     const token = res.data?.token || null;
     useAuthStore.getState().setToken(token);
-    exe();
+    // updateClientHeader(token || '');
     return {
       success: true,
       message: 'User logged in successfully',

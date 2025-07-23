@@ -9,7 +9,15 @@ const isProduction = import.meta.env.MODE === 'production';
 
 const address = isProduction ? 'https://expenses-tracker-backend-one.vercel.app/' : 'http://localhost:3000/';
 
-const client = (hc as typeof hcWithType)(address);
+let client = (hc as typeof hcWithType)(address);
+
+export function updateClientHeader(token: string) {
+  client = (hc as typeof hcWithType)(address, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
 
 // const client = hc<AppType>('/api', {
 //   headers: {
