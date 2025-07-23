@@ -59,7 +59,6 @@ declare const client: {
                             id: string;
                             name: string;
                             email: string;
-                            totalAmount: string;
                             picture: string;
                             token: string;
                         } | null;
@@ -74,41 +73,35 @@ declare const client: {
     };
 } & {
     api: {
-        api: {
-            transaction: import("hono/client").ClientRequest<{
-                $get: {
-                    input: {};
-                    output: {
-                        transactions: {
-                            id: string;
-                            amount: number;
-                            description: string;
-                            transactionType: "income" | "expense";
-                            userId: string;
-                            createdAt: string;
-                            updatedAt: string;
-                        }[];
-                    };
-                    outputFormat: "json";
-                    status: import("hono/utils/http-status").ContentfulStatusCode;
+        transaction: import("hono/client").ClientRequest<{
+            $get: {
+                input: {};
+                output: {
+                    transactions: {
+                        id: string;
+                        amount: string;
+                        description: string;
+                        transactionType: "deposit" | "withdrawal" | "expense" | "goal" | "transfer" | "send" | "receive";
+                        userId: string;
+                        accountId: string | null;
+                        referenceId: string | null;
+                        referenceType: string | null;
+                        createdAt: string;
+                        updatedAt: string;
+                    }[];
                 };
-                $post: {
-                    input: {};
-                    output: {
-                        message: string;
-                        transaction: {
-                            id: string;
-                        }[];
-                        updatedAmount: {
-                            id: string;
-                            amount: string;
-                        }[];
-                    };
-                    outputFormat: "json";
-                    status: import("hono/utils/http-status").ContentfulStatusCode;
+                outputFormat: "json";
+                status: import("hono/utils/http-status").ContentfulStatusCode;
+            };
+            $post: {
+                input: {};
+                output: {
+                    message: string;
                 };
-            }>;
-        };
+                outputFormat: "json";
+                status: import("hono/utils/http-status").ContentfulStatusCode;
+            };
+        }>;
     };
 } & {
     api: {

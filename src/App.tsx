@@ -3,11 +3,13 @@ import { Toaster } from 'sonner';
 import { ProtectedRoute, UnprotectedRoute } from './components/ProtectedRoute';
 import Layout from './components/layout';
 import { ThemeProvider } from './components/theme-provider';
+import Home from './routes/Home';
+import NotFoundPage from './routes/NotFoundPage';
 import LoginPage from './routes/auth/Login';
 import SignupPage from './routes/auth/Signup';
 import VerifyPage from './routes/auth/Verify';
 import Test from './routes/test/test';
-import Home from './routes/Home';
+import Accounts from './routes/accounts/Accounts';
 
 const router = createBrowserRouter([
   {
@@ -22,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Home />,
+      },
+      {
+        path: '/accounts',
+        element: <Accounts />,
       },
     ],
   },
@@ -47,6 +53,7 @@ const router = createBrowserRouter([
     ],
   },
   { path: '/test', element: <Test /> },
+  { path: '*', element: <NotFoundPage /> },
 ]);
 
 const App = () => {

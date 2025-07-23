@@ -1,6 +1,6 @@
 
 import type { ReactNode } from "react"
-import Sidebar from "./sidebar"
+import Sidebar from "./sidebar/sidebar"
 import TopNav from "./top-nav"
 import { useTheme } from "next-themes"
 import { useEffect, useState } from "react"
