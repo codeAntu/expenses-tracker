@@ -9,10 +9,11 @@ import {
   MessagesSquare,
   Receipt,
   Settings,
+  Settings2Icon,
   Shield,
   Users2,
   Video,
-  Wallet
+  Wallet,
 } from 'lucide-react';
 
 export type NavPage = {
@@ -27,6 +28,11 @@ export const overviewPages: NavPage[] = [
     name: 'Accounts',
     href: '/accounts',
     icon: Landmark,
+  },
+  {
+    name: 'Test',
+    href: '/test',
+    icon: Settings2Icon,
   },
   { name: 'Analytics', href: '/analytics', icon: BarChart2 },
   { name: 'Organization', href: '/organization', icon: Building2 },

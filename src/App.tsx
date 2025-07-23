@@ -52,7 +52,14 @@ const router = createBrowserRouter([
       },
     ],
   },
-  { path: '/test', element: <Test /> },
+  {
+    path: '/test',
+    element: (
+      <Layout>
+        <Test />
+      </Layout>
+    ),
+  },
   { path: '*', element: <NotFoundPage /> },
 ]);
 

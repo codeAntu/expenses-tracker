@@ -1,17 +1,24 @@
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { NavPage } from './pages';
+import { cn } from '@/lib/utils';
 
 interface NavItemProps {
-  href: string;
+  link: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   children: React.ReactNode;
 }
 
-export function NavItem({ href, icon: Icon, children }: NavItemProps) {
+export function NavItem({ link, icon: Icon, children }: NavItemProps) {
+  const path = useLocation().pathname;
+  const isActive = path.endsWith(link || '') || path.endsWith(`/${link}`) || path.endsWith(`/${link}/`);
+
   return (
     <Link
-      to={href}
-      className='flex items-center rounded-md px-3 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-[#1F1F23] dark:hover:text-white'
+      to={link}
+      className={cn(
+        'flex items-center rounded-md px-3 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-[#1F1F23] dark:hover:text-white',
+        isActive ? 'bg-gray-100 dark:bg-[#1F1F23]' : '',
+      )}
     >
       <Icon className='mr-3 h-4 w-4 flex-shrink-0' />
       {children}
@@ -27,7 +34,7 @@ export function NavSection({ title, pages }: { title: string; pages: NavPage[] }
       </div>
       <div className='space-y-1'>
         {pages.map((page) => (
-          <NavItem key={page.name} href={page.href} icon={page.icon}>
+          <NavItem key={page.name} link={page.href} icon={page.icon}>
             {page.name}
           </NavItem>
         ))}

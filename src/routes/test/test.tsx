@@ -1,3 +1,4 @@
+import Logout from '@/components/logout';
 import { Button } from '@/components/ui/button';
 import client from '@/utils/client';
 import { useMutation } from '@tanstack/react-query';
@@ -18,9 +19,15 @@ function Test() {
   });
 
   return (
-    <div>
-      <Button onClick={() => testApiMutation.mutate()}>Test</Button>
-      {message && <div>API Response: {message}</div>}
+    <div className='flex min-h-[calc(100dvh-8rem)] w-full flex-col xl:flex-row'>
+      <Logout>
+        <Button variant='outline'>Logout</Button>
+      </Logout>
+
+      <div>
+        <Button onClick={() => testApiMutation.mutate()}>Test</Button>
+        {message && <div>API Response: {message}</div>}
+      </div>
     </div>
   );
 }

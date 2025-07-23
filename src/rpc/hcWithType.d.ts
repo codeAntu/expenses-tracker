@@ -73,6 +73,39 @@ declare const client: {
     };
 } & {
     api: {
+        account: import("hono/client").ClientRequest<{
+            $get: {
+                input: {};
+                output: never;
+                outputFormat: "json";
+                status: import("hono/utils/http-status").ContentfulStatusCode;
+            } | {
+                input: {};
+                output: {
+                    success: boolean;
+                    statusCode: number;
+                    message: string;
+                    data: {
+                        then: {};
+                        catch: {};
+                        finally: {};
+                    } | null;
+                    error: string | null;
+                    timestamp: string;
+                };
+                outputFormat: "json";
+                status: 200;
+            };
+        }>;
+    };
+} & {
+    api: {
+        account: {
+            [x: string]: import("hono/client").ClientRequest<{}>;
+        };
+    };
+} & {
+    api: {
         transaction: import("hono/client").ClientRequest<{
             $get: {
                 input: {};
