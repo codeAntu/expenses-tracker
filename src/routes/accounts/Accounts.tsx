@@ -6,7 +6,7 @@ const Accounts: FC = () => {
   // get all account
   const { data } = useQuery({
     queryKey: ['accounts'],
-    queryFn: async () => (await client.api.account.$get()).json(),
+    queryFn: async () => await (await client.api.account.$get()).json(),
   });
 
   console.log('Accounts data:', data);
