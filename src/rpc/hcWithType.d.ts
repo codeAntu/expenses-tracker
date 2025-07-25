@@ -100,7 +100,7 @@ declare const client: {
                 input: {
                     json: {
                         name: string;
-                        description: string;
+                        description?: string | undefined;
                         icon?: string | undefined;
                         color?: string | undefined;
                     };
@@ -112,7 +112,7 @@ declare const client: {
                 input: {
                     json: {
                         name: string;
-                        description: string;
+                        description?: string | undefined;
                         icon?: string | undefined;
                         color?: string | undefined;
                     };

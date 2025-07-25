@@ -10,10 +10,14 @@ const isProduction = import.meta.env.MODE === 'production';
 
 const address = isProduction ? 'https://expenses-tracker-backend-one.vercel.app/' : 'http://localhost:3000/';
 
-let client = hc<typeof hcWithType>(address, {
+let client = (hc as typeof hcWithType)(address, {
   headers() {
     const { token } = useAuthStore.getState();
-    return token ? { Authorization: `Bearer ${token}` } : {};
+    return token
+      ? { Authorization: `Bearer ${token}` }
+      : {
+          Authorization: '',
+        };
   },
 });
 
