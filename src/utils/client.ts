@@ -13,13 +13,7 @@ const address = isProduction ? 'https://expenses-tracker-backend-one.vercel.app/
 let client = hc<typeof hcWithType>(address, {
   headers() {
     const { token } = useAuthStore.getState();
-    if (!token)
-      return {
-        Authorization: '',
-      };
-    return {
-      Authorization: `Bearer ${token}`,
-    };
+    return token ? { Authorization: `Bearer ${token}` } : {};
   },
 });
 

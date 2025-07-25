@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query';
 import { FC } from 'react';
 
 const Accounts: FC = () => {
-  // get all account
   const { data } = useQuery({
     queryKey: ['accounts'],
     queryFn: async () => await (await client.api.account.$get()).json(),
