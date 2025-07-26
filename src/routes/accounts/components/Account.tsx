@@ -1,11 +1,13 @@
 import { IconButton } from '@/components/lib/iconutton';
 import { Button } from '@/components/ui/button';
 import { CardDescription } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { motion } from 'framer-motion';
 import { CreditCard, PlusIcon, Wallet } from 'lucide-react';
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router';
+import DepositFunds from './DepositFunds';
+import WithdrawFunds from './WithdrawFunds';
 
 interface AccountProps {
   account: {
@@ -32,59 +34,12 @@ const Account: FC<AccountProps> = ({ account }) => {
               <Wallet className='aspect-square w-5 text-emerald-600 dark:text-emerald-400' />
             </div>
             <div className='flex items-center gap-2'>
-              <IconButton className='' size='sm'>
-                <CreditCard className='' />
+              <IconButton className='' size='sm' onClick={() => setOpenDeposit(true)}>
+                <PlusIcon className='' />
               </IconButton>
-              {/* Deposit Dialog */}
-              <Dialog open={openDeposit} onOpenChange={setOpenDeposit}>
-                <DialogTrigger asChild>
-                  <PlusIcon />
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Deposit Funds</DialogTitle>
-                  </DialogHeader>
-                  <div className='flex flex-col gap-4'>
-                    <Button
-                      onClick={() => {
-                        /* mute function here */
-                      }}
-                    >
-                      Deposit
-                    </Button>
-                  </div>
-                  <DialogFooter>
-                    <Button variant='outline' onClick={() => setOpenDeposit(false)}>
-                      Close
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-              {/* Withdraw Dialog */}
-              <Dialog open={openWithdraw} onOpenChange={setOpenWithdraw}>
-                <DialogTrigger asChild>
-                  <CreditCard className='rotate-180' />
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Withdraw Funds</DialogTitle>
-                  </DialogHeader>
-                  <div className='flex flex-col gap-4'>
-                    <Button
-                      onClick={() => {
-                        /* mute function here */
-                      }}
-                    >
-                      Withdraw Money
-                    </Button>
-                  </div>
-                  <DialogFooter>
-                    <Button variant='outline' onClick={() => setOpenWithdraw(false)}>
-                      Close
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+              <IconButton size='sm' onClick={() => setOpenWithdraw(true)}>
+                <CreditCard className='rotate-180' />
+              </IconButton>
             </div>
           </div>
           <div className=''>
@@ -100,6 +55,17 @@ const Account: FC<AccountProps> = ({ account }) => {
             View Details
           </Button>
         </div>
+
+        <Dialog open={openDeposit} onOpenChange={setOpenDeposit}>
+          <DialogContent>
+            <DepositFunds account={account} onClose={() => setOpenDeposit(false)} />
+          </DialogContent>
+        </Dialog>
+        <Dialog open={openWithdraw} onOpenChange={setOpenWithdraw}>
+          <DialogContent>
+            <WithdrawFunds account={account} onClose={() => setOpenWithdraw(false)} />
+          </DialogContent>
+        </Dialog>
       </div>
     </motion.div>
   );

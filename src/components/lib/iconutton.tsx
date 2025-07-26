@@ -4,11 +4,9 @@ import { cn } from '@/lib/utils';
 
 function IconButton({
   className,
-  asChild = false,
   size = 'md',
   ...props
 }: React.ComponentProps<'button'> & {
-  asChild?: boolean;
   size?: 'sm' | 'md' | 'lg' | 'xs';
 }) {
   return (
@@ -22,9 +20,9 @@ function IconButton({
         size === 'lg' && 'h-12 w-12',
         className,
       )}
+      {...props}
     >
       {props.children}
-      {asChild ? <span {...props} /> : null}
     </button>
   );
 }

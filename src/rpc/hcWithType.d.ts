@@ -111,18 +111,6 @@ declare const client: {
                         color?: string | undefined;
                     };
                 };
-                output: never;
-                outputFormat: "json";
-                status: 500;
-            } | {
-                input: {
-                    json: {
-                        title: string;
-                        description?: string | undefined;
-                        icon?: string | undefined;
-                        color?: string | undefined;
-                    };
-                };
                 output: {
                     success: boolean;
                     statusCode: number;
@@ -143,13 +131,234 @@ declare const client: {
                 };
                 outputFormat: "json";
                 status: 201;
+            } | {
+                input: {
+                    json: {
+                        title: string;
+                        description?: string | undefined;
+                        icon?: string | undefined;
+                        color?: string | undefined;
+                    };
+                };
+                output: never;
+                outputFormat: "json";
+                status: 500;
             };
         }>;
     };
 } & {
     api: {
         account: {
-            [x: string]: import("hono/client").ClientRequest<{}>;
+            ":id": import("hono/client").ClientRequest<{
+                $put: {
+                    input: {
+                        json: {
+                            title: string;
+                            description?: string | undefined;
+                            icon?: string | undefined;
+                            color?: string | undefined;
+                        };
+                    } & {
+                        param: {
+                            id: string;
+                        };
+                    };
+                    output: never;
+                    outputFormat: "json";
+                    status: 500;
+                } | {
+                    input: {
+                        json: {
+                            title: string;
+                            description?: string | undefined;
+                            icon?: string | undefined;
+                            color?: string | undefined;
+                        };
+                    } & {
+                        param: {
+                            id: string;
+                        };
+                    };
+                    output: {
+                        success: boolean;
+                        statusCode: number;
+                        message: string;
+                        data: {
+                            account: {
+                                id: string;
+                                title: string;
+                                description: string | null;
+                                balance: string;
+                                icon: string;
+                                color: string;
+                                userId: string;
+                                createdAt: string;
+                                updatedAt: string;
+                            };
+                        } | null;
+                        error: string | null;
+                        timestamp: string;
+                    };
+                    outputFormat: "json";
+                    status: 200;
+                };
+                $delete: {
+                    input: {
+                        param: {
+                            id: string;
+                        };
+                    };
+                    output: never;
+                    outputFormat: "json";
+                    status: 500;
+                } | {
+                    input: {
+                        param: {
+                            id: string;
+                        };
+                    };
+                    output: {
+                        success: boolean;
+                        statusCode: number;
+                        message: string;
+                        data: {
+                            account: {
+                                id: string;
+                                title: string;
+                                description: string | null;
+                                icon: string;
+                                color: string;
+                                createdAt: string;
+                                updatedAt: string;
+                                balance: string;
+                                userId: string;
+                            };
+                        } | null;
+                        error: string | null;
+                        timestamp: string;
+                    };
+                    outputFormat: "json";
+                    status: 200;
+                };
+            }>;
+        };
+    };
+} & {
+    api: {
+        account: {
+            ":id": {
+                deposit: import("hono/client").ClientRequest<{
+                    $post: {
+                        input: {
+                            json: {
+                                amount: number;
+                                description?: string | undefined;
+                            };
+                        } & {
+                            param: {
+                                id: string;
+                            };
+                        };
+                        output: never;
+                        outputFormat: "json";
+                        status: 500;
+                    } | {
+                        input: {
+                            json: {
+                                amount: number;
+                                description?: string | undefined;
+                            };
+                        } & {
+                            param: {
+                                id: string;
+                            };
+                        };
+                        output: {
+                            success: boolean;
+                            statusCode: number;
+                            message: string;
+                            data: {
+                                accountId: string;
+                                amount: number;
+                                account: {
+                                    id: string;
+                                    title: string;
+                                    description: string | null;
+                                    balance: string;
+                                    icon: string;
+                                    color: string;
+                                    userId: string;
+                                    createdAt: string;
+                                    updatedAt: string;
+                                };
+                            } | null;
+                            error: string | null;
+                            timestamp: string;
+                        };
+                        outputFormat: "json";
+                        status: 200;
+                    };
+                }>;
+            };
+        };
+    };
+} & {
+    api: {
+        account: {
+            ":id": {
+                withdraw: import("hono/client").ClientRequest<{
+                    $post: {
+                        input: {
+                            json: {
+                                amount: number;
+                                description?: string | undefined;
+                            };
+                        } & {
+                            param: {
+                                id: string;
+                            };
+                        };
+                        output: never;
+                        outputFormat: "json";
+                        status: 500;
+                    } | {
+                        input: {
+                            json: {
+                                amount: number;
+                                description?: string | undefined;
+                            };
+                        } & {
+                            param: {
+                                id: string;
+                            };
+                        };
+                        output: {
+                            success: boolean;
+                            statusCode: number;
+                            message: string;
+                            data: {
+                                accountId: string;
+                                amount: number;
+                                account: {
+                                    id: string;
+                                    title: string;
+                                    description: string | null;
+                                    balance: string;
+                                    icon: string;
+                                    color: string;
+                                    userId: string;
+                                    createdAt: string;
+                                    updatedAt: string;
+                                };
+                            } | null;
+                            error: string | null;
+                            timestamp: string;
+                        };
+                        outputFormat: "json";
+                        status: 200;
+                    };
+                }>;
+            };
         };
     };
 } & {
