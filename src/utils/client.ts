@@ -1,4 +1,5 @@
 import hcWithType from '@/rpc/hcWithType';
+import type { Client as HonoClient } from '@/rpc/hcWithType';
 
 // @ts-expect-error: hc import is not typed correctly
 // import { hc } from 'hono/dist/client/client';
@@ -36,3 +37,5 @@ export function updateClientHeader(token: string) {
 // })
 
 export default client;
+export type Client = HonoClient;
+

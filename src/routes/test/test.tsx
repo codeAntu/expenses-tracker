@@ -1,16 +1,14 @@
 import Logout from '@/components/logout';
 import { Button } from '@/components/ui/button';
 import client from '@/utils/client';
-import { useAuthStore } from '@/zustand/authStore';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 function Test() {
   const [message, setMessage] = useState('');
-  const token = useAuthStore((state) => state.token);
 
-  console.log('Test token:', token);
+  // console.log('Test token:', token);
 
   // TODO: fix the token issue
   const testApiMutation = useMutation({
@@ -28,6 +26,14 @@ function Test() {
       <Logout>
         <Button variant='outline'>Logout</Button>
       </Logout>
+
+      <Button
+        onClick={() => {
+          console.log('Deposit button clicked');
+        }}
+      >
+        <span className='text-sm'>Deposit to Account</span>
+      </Button>
 
       <div>
         <Button onClick={() => testApiMutation.mutate()}>Test</Button>

@@ -1,20 +1,17 @@
-import { IconButton } from '@/components/lib/iconutton';
 import { Search } from '@/components/Search';
-import { Button } from '@/components/ui/button';
-import { CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import client from '@/utils/client';
 import { useQuery } from '@tanstack/react-query';
-import { motion } from 'framer-motion';
-import { ArrowDown, ArrowUp, ClockArrowDown, ClockArrowUp, CreditCard, PlusIcon, Wallet } from 'lucide-react';
+import { ArrowDown, ArrowUp, ClockArrowDown, ClockArrowUp } from 'lucide-react';
 import { FC, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
+import Account from './components/Account';
+import AccountsLoading from './components/AccountsLoading';
 import { AddAccount } from './components/AddAccount';
+import NoAccounts from './components/NoAccounts';
 
 const Accounts: FC = () => {
   const [search, setSearch] = useState('');
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc' | 'latest' | 'oldest'>('latest');
-  const navigate = useNavigate();
 
   const { data } = useQuery({
     queryKey: ['all-accounts'],
@@ -43,6 +40,8 @@ const Accounts: FC = () => {
     }
     return filtered;
   }, [accounts, search, sortOrder]);
+
+  const isLoading = !data && !accounts.length;
 
   return (
     <div className='w-full'>
@@ -91,42 +90,28 @@ const Accounts: FC = () => {
             <AddAccount />
           </div>
         </div>
-        <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4'>
-          {filteredAccounts.map((acc) => (
-            <motion.div key={acc.id} whileHover={{ scale: 1.01, y: -1 }} whileTap={{ scale: 0.99 }}>
-              <div className='card space-y-2'>
-                <div className='flex items-center justify-between'>
-                  <div className='flex aspect-square w-10 items-center justify-center rounded-lg bg-emerald-500/10'>
-                    <Wallet className='aspect-square w-5 text-emerald-600 dark:text-emerald-400' />
-                  </div>
-                  <div className='flex items-center gap-2'>
-                    <IconButton className='' size='sm'>
-                      <CreditCard className='' />
-                    </IconButton>
-                    <IconButton className='' size='sm'>
-                      <PlusIcon />
-                    </IconButton>
-                  </div>
-                </div>
-                <div className=''>
-                  <div className='text-xl font-bold'>{acc.balance}</div>
-                  <div className='line-clamp-1 text-sm font-medium'> {acc.title}</div>
-                  <CardDescription className='line-clamp-2 text-xs'>{acc.description}</CardDescription>
-                </div>
-                <div className='pt1'>
-                  <Button
-                    className='w-full rounded-full'
-                    variant='outline'
-                    onClick={() => navigate(`/accounts/${acc.id}`)}
-                  >
-                    <CreditCard className='h-4 w-4' />
-                    View Details
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+        {isLoading ? (
+          <AccountsLoading />
+        ) : filteredAccounts.length === 0 ? (
+          <NoAccounts />
+        ) : (
+          <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4'>
+            {filteredAccounts.map((acc) => (
+              <Account
+                key={acc.id}
+                account={{
+                  id: acc.id,
+                  title: acc.title,
+                  description: acc.description || '',
+                  balance: acc.balance,
+                  icon: acc.icon,
+                  color: acc.color,
+                  createdAt: acc.createdAt,
+                }}
+              />
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );
