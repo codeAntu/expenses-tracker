@@ -86,10 +86,16 @@ declare const client: {
                     statusCode: number;
                     message: string;
                     data: {
-                        then: {};
-                        catch: {};
-                        finally: {};
-                    } | null;
+                        id: string;
+                        title: string;
+                        description: string | null;
+                        balance: string;
+                        icon: string;
+                        color: string;
+                        userId: string;
+                        createdAt: string;
+                        updatedAt: string;
+                    }[] | null;
                     error: string | null;
                     timestamp: string;
                 };
@@ -99,7 +105,7 @@ declare const client: {
             $post: {
                 input: {
                     json: {
-                        name: string;
+                        title: string;
                         description?: string | undefined;
                         icon?: string | undefined;
                         color?: string | undefined;
@@ -111,7 +117,7 @@ declare const client: {
             } | {
                 input: {
                     json: {
-                        name: string;
+                        title: string;
                         description?: string | undefined;
                         icon?: string | undefined;
                         color?: string | undefined;
@@ -123,7 +129,7 @@ declare const client: {
                     message: string;
                     data: {
                         id: string;
-                        name: string;
+                        title: string;
                         description: string | null;
                         icon: string;
                         color: string;

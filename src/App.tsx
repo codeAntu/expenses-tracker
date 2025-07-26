@@ -5,11 +5,12 @@ import Layout from './components/layout';
 import { ThemeProvider } from './components/theme-provider';
 import Home from './routes/Home';
 import NotFoundPage from './routes/NotFoundPage';
+import Accounts from './routes/accounts/Accounts';
 import LoginPage from './routes/auth/Login';
 import SignupPage from './routes/auth/Signup';
 import VerifyPage from './routes/auth/Verify';
 import Test from './routes/test/test';
-import Accounts from './routes/accounts/Accounts';
+import AccountDetails from './routes/accounts/pages/AccountDetails';
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: '/accounts',
         element: <Accounts />,
+      },
+      {
+        path: '/accounts/:accountId',
+        element: <AccountDetails />,
       },
     ],
   },
