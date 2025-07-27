@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import client from '@/utils/client';
 import { useMutation } from '@tanstack/react-query';
 import { FC, useState } from 'react';
+import { toast } from 'sonner';
 
 interface WithdrawFundsProps {
   account: {
@@ -21,23 +22,39 @@ interface WithdrawFundsProps {
 
 const WithdrawFunds: FC<WithdrawFundsProps> = ({ account, onClose }) => {
   const [amount, setAmount] = useState('');
+  const [description, setDescription] = useState('');
 
-  const { mutate } = useMutation({
-    mutationFn: async () =>
+  const { mutate, isPending: isWithdrawing } = useMutation({
+    mutationFn: async ({ amount, description }: { amount: number; description?: string }) =>
       await (
         await client.api.account[':id'].withdraw.$post({
           json: {
             amount: Number(amount),
-            description: `Withdrawal from account ${account.title}`,
+            description: description || `Withdrawal from account ${account.title}`,
           },
           param: { id: account.id },
         })
       ).json(),
-    onSuccess: () => {
-      console.log('Withdrawal successful');
-      onClose(); // Close the modal on success
+    onSuccess: (res) => {
+      if (!res.success) {
+        toast.error('Failed to withdraw funds');
+        return;
+      }
+      toast.success('Withdrawal successful');
+      onClose();
     },
   });
+
+  function handleWithdraw() {
+    if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
+      toast.error('Please enter a valid amount to withdraw.');
+      return;
+    }
+    mutate({
+      amount: Number(amount),
+      description: description || `Withdrawal from account ${account.title}`,
+    });
+  }
 
   return (
     <div>
@@ -48,14 +65,25 @@ const WithdrawFunds: FC<WithdrawFundsProps> = ({ account, onClose }) => {
         <Input
           type='number'
           placeholder='Enter amount'
-          className='mt-2'
+          className='no-spinner mt-2'
           value={amount}
-          onChange={(e) => setAmount(e.target.value)}
+          min={0}
+          step='any'
+          onChange={(e) => {
+            const val = e.target.value;
+            if (val === '' || (!isNaN(Number(val)) && Number(val) >= 0)) {
+              setAmount(val);
+            }
+          }}
         />
       </div>
       <div className='mt-4 space-y-2'>
         <Label className='mt-4'>Description</Label>
-        <Textarea></Textarea>
+        <Textarea
+          placeholder={`Withdrawal from account ${account.title}`}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        ></Textarea>
       </div>
 
       <div className='py-2'>
@@ -73,15 +101,10 @@ const WithdrawFunds: FC<WithdrawFundsProps> = ({ account, onClose }) => {
           Close
         </Button>
         <Button
-          onClick={() => {
-            if (amount) {
-              mutate();
-            } else {
-              alert('Please enter an amount to withdraw');
-            }
-          }}
+          onClick={handleWithdraw}
+          disabled={isWithdrawing || !amount || isNaN(Number(amount)) || Number(amount) <= 0}
         >
-          Withdraw
+          {isWithdrawing ? 'Withdrawing...' : 'Withdraw'}
         </Button>
       </div>
     </div>

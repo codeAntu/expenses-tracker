@@ -4,8 +4,9 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { FC, useState } from 'react';
 
-import { useMutation } from '@tanstack/react-query';
 import client from '@/utils/client';
+import { useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 interface DepositFundsProps {
   account: {
@@ -24,8 +25,8 @@ const DepositFunds: FC<DepositFundsProps> = ({ account, onClose }) => {
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
 
-  const { mutate } = useMutation({
-    mutationFn: async () =>
+  const { mutate, isPending: isDepositing } = useMutation({
+    mutationFn: async ({ amount, description }: { amount: number; description?: string }) =>
       await (
         await client.api.account[':id'].deposit.$post({
           json: {
@@ -35,11 +36,28 @@ const DepositFunds: FC<DepositFundsProps> = ({ account, onClose }) => {
           param: { id: account.id },
         })
       ).json(),
-    onSuccess: () => {
-      console.log('Deposit successful');
+    onSuccess: (res) => {
+      if (!res.success) {
+        toast.error('Failed to deposit funds');
+        return;
+      }
+
+      toast.success('Deposit successful');
       onClose();
     },
   });
+
+  function handleDeposit() {
+    if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
+      toast.error('Please enter a valid amount to deposit.');
+      return;
+    }
+
+    mutate({
+      amount: Number(amount),
+      description: description || `Deposit to account ${account.title}`,
+    });
+  }
 
   return (
     <div>
@@ -50,9 +68,16 @@ const DepositFunds: FC<DepositFundsProps> = ({ account, onClose }) => {
         <Input
           type='number'
           placeholder='Enter amount'
-          className='mt-2'
+          className='no-spinner mt-2'
           value={amount}
-          onChange={(e) => setAmount(e.target.value)}
+          min={0}
+          step='any'
+          onChange={(e) => {
+            const val = e.target.value;
+            if (val === '' || (!isNaN(Number(val)) && Number(val) >= 0)) {
+              setAmount(val);
+            }
+          }}
         />
       </div>
       <div className='mt-4'>
@@ -64,20 +89,15 @@ const DepositFunds: FC<DepositFundsProps> = ({ account, onClose }) => {
           onChange={(e) => setDescription(e.target.value)}
         />
       </div>
-      <div className='mt-4 flex flex-col gap-4'>
-        <Button
-          onClick={() => {
-            if (amount) {
-              mutate();
-            } else {
-              alert('Please enter an amount to deposit');
-            }
-          }}
-        >
-          Deposit
-        </Button>
+      <div className='mt-4 grid grid-cols-2 gap-4'>
         <Button variant='outline' onClick={onClose}>
           Close
+        </Button>
+        <Button
+          onClick={handleDeposit}
+          disabled={isDepositing || !amount || isNaN(Number(amount)) || Number(amount) <= 0}
+        >
+          {isDepositing ? 'Depositing...' : 'Deposit'}
         </Button>
       </div>
     </div>

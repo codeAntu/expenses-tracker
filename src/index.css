@@ -159,3 +159,13 @@ body {
 .card {
   @apply overflow-hidden rounded-xl border bg-white p-4 transition-all duration-300 dark:bg-zinc-900/50;
 }
+
+/* Hide number input arrows for all browsers */
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.no-spinner[type='number'] {
+  -moz-appearance: textfield;
+}
