@@ -12,6 +12,7 @@ import SignupPage from './routes/auth/Signup';
 import VerifyPage from './routes/auth/Verify';
 import Test from './routes/test/test';
 import Expenses from './routes/expenses/Expenses';
+import DefaultAccount from './routes/defaultAccount/DefaultAccount';
 
 const router = createBrowserRouter([
   {
@@ -28,11 +29,15 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
+        path: '/account',
+        element: <DefaultAccount />,
+      },
+      {
         path: '/accounts',
         element: <Outlet />,
         children: [
           {
-            path: '',
+            path: 'all',
             element: <Accounts />,
           },
           {
@@ -41,6 +46,7 @@ const router = createBrowserRouter([
           },
         ],
       },
+
       {
         path: '/expenses',
         element: <Expenses />,

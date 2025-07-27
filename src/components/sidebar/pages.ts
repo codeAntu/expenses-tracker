@@ -26,11 +26,16 @@ export const overviewPages: NavPage[] = [
   { name: 'Dashboard', href: '/', icon: Home },
   {
     name: 'Accounts',
-    href: '/accounts',
+    href: '/account',
+    icon: Wallet,
+  },
+  {
+    name: 'All Accounts',
+    href: '/accounts/all',
     icon: Landmark,
   },
   {
-    name: "Expenses",
+    name: 'Expenses',
     href: '/expenses',
     icon: Wallet,
   },
