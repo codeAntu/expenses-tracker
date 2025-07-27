@@ -3,6 +3,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import queryClient from '@/query/query';
+import Loading from '@/routes/components/Loading';
 import client from '@/utils/client';
 import { useMutation } from '@tanstack/react-query';
 import { FC, useState } from 'react';
@@ -107,7 +108,7 @@ const WithdrawFunds: FC<WithdrawFundsProps> = ({ account, onClose }) => {
           onClick={handleWithdraw}
           disabled={isWithdrawing || !amount || isNaN(Number(amount)) || Number(amount) <= 0}
         >
-          {isWithdrawing ? 'Withdrawing...' : 'Withdraw'}
+          {isWithdrawing ? <Loading /> : 'Withdraw'}
         </Button>
       </div>
     </div>

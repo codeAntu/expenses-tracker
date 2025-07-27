@@ -2,6 +2,7 @@ import client from '@/utils/client';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router';
 import { AccountActions } from './components/AccountActions';
+import Loading from '@/routes/components/Loading';
 
 const AccountDetails = () => {
   const { accountId } = useParams();
@@ -17,17 +18,12 @@ const AccountDetails = () => {
   const account = data?.data
     ? {
         ...data.data,
-        description: data.data.description ?? '', 
+        description: data.data.description ?? '',
       }
     : null;
 
   if (isPending) {
-    return (
-      <div className='w-full p-6'>
-        <h2 className='text-xl font-semibold'>Loading...</h2>
-        <p className='text-muted-foreground'>Fetching account details, please wait.</p>
-      </div>
-    );
+    return <Loading className='h-full w-full' variant='primary' />;
   }
 
   if (!account) {

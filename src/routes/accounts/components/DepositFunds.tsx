@@ -8,6 +8,7 @@ import client from '@/utils/client';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import queryClient from '@/query/query';
+import Loading from '@/routes/components/Loading';
 
 interface DepositFundsProps {
   account: {
@@ -100,7 +101,7 @@ const DepositFunds: FC<DepositFundsProps> = ({ account, onClose }) => {
           onClick={handleDeposit}
           disabled={isDepositing || !amount || isNaN(Number(amount)) || Number(amount) <= 0}
         >
-          {isDepositing ? 'Depositing...' : 'Deposit'}
+          {isDepositing ? <Loading /> : 'Deposit'}
         </Button>
       </div>
     </div>

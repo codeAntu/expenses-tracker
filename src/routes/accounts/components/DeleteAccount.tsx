@@ -5,6 +5,7 @@ import { Trash2 } from 'lucide-react';
 import { FC } from 'react';
 import { Account } from '../types';
 import { toast } from 'sonner';
+import Loading from '@/routes/components/Loading';
 
 interface DeleteAccountProps {
   account: Account;
@@ -13,7 +14,7 @@ interface DeleteAccountProps {
 }
 
 const DeleteAccount: FC<DeleteAccountProps> = ({ account, onDelete, onCancel }) => {
-  const { mutate } = useMutation({
+  const { mutate, isPending: isDeleting } = useMutation({
     mutationKey: ['deleteAccount', account.id],
     mutationFn: async () =>
       await (
@@ -46,7 +47,7 @@ const DeleteAccount: FC<DeleteAccountProps> = ({ account, onDelete, onCancel }) 
           Cancel
         </Button>
         <Button variant='destructive' onClick={() => mutate()} className='px-4'>
-          Delete
+          {isDeleting ? <Loading /> : 'Delete Account'}
         </Button>
       </div>
     </div>

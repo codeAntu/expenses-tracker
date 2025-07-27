@@ -1,14 +1,14 @@
 import { Search } from '@/components/Search';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import client from '@/utils/client';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowDown, ArrowUp, ClockArrowDown, ClockArrowUp } from 'lucide-react';
 import { FC, useMemo, useState } from 'react';
+import Loading from '../components/Loading';
 import Account from './components/Account';
-import AccountsLoading from './components/AccountsLoading';
 import { AddAccount } from './components/AddAccount';
 import NoAccounts from './components/NoAccounts';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 
 const Accounts: FC = () => {
   const [search, setSearch] = useState('');
@@ -100,7 +100,7 @@ const Accounts: FC = () => {
           </div>
         </div>
         {isLoading ? (
-          <AccountsLoading />
+          <Loading className='h-[80dvh] w-full' variant='primary' />
         ) : filteredAccounts.length === 0 ? (
           <NoAccounts />
         ) : (
@@ -117,7 +117,6 @@ const Accounts: FC = () => {
                   color: acc.color,
                   createdAt: acc.createdAt,
                 }}
-                
               />
             ))}
           </div>

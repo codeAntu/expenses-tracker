@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui/button';
-import { DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import queryClient from '@/query/query';
+import Loading from '@/routes/components/Loading';
 import { SelectIcons } from '@/routes/components/SelectIcons';
 import client from '@/utils/client';
 import { useMutation } from '@tanstack/react-query';
@@ -73,7 +73,7 @@ export const AddAccount: FC<AddAccountProps> = ({ account: initialAccount, onClo
             icon: account.icon,
             color: account.color,
           },
-          param: { id: initialAccount!.id }, 
+          param: { id: initialAccount!.id },
         })
       ).json(),
     onSuccess: (res) => {
@@ -100,6 +100,15 @@ export const AddAccount: FC<AddAccountProps> = ({ account: initialAccount, onClo
       return;
     }
     if (isEdit && initialAccount?.id) {
+      if (
+        account.title === initialAccount.title &&
+        account.description === initialAccount.description &&
+        account.icon === initialAccount.icon &&
+        account.color === initialAccount.color
+      ) {
+        toast.info('No changes to update.');
+        return;
+      }
       updateAccount();
     } else {
       addAccount();
@@ -153,11 +162,20 @@ export const AddAccount: FC<AddAccountProps> = ({ account: initialAccount, onClo
         </div>
       </div>
       <SelectIcons icon={account.icon} onSelect={(icon) => setAccount((a) => ({ ...a, icon }))} color={account.color} />
-      <DialogFooter>
-        <Button onClick={handleSubmit} disabled={isAdding || isUpdating}>
-          {isAdding || isUpdating ? (isEdit ? 'Updating...' : 'Adding...') : isEdit ? 'Update Account' : 'Add Account'}
+      <div className='grid grid-cols-2 gap-4 pt-4'>
+        <Button
+          variant='outline'
+          onClick={() => {
+            if (onClose) onClose();
+          }}
+          disabled={isAdding || isUpdating}
+        >
+          cancel
         </Button>
-      </DialogFooter>
+        <Button onClick={handleSubmit} disabled={isAdding || isUpdating} className=''>
+          {isAdding || isUpdating ? <Loading /> : isEdit ? 'Update Account' : 'Add Account'}
+        </Button>
+      </div>
     </div>
   );
 };
