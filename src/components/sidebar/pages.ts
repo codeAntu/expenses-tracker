@@ -30,6 +30,11 @@ export const overviewPages: NavPage[] = [
     icon: Landmark,
   },
   {
+    name: "Expenses",
+    href: '/expenses',
+    icon: Wallet,
+  },
+  {
     name: 'Test',
     href: '/test',
     icon: Settings2Icon,

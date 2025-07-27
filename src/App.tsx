@@ -11,6 +11,7 @@ import LoginPage from './routes/auth/Login';
 import SignupPage from './routes/auth/Signup';
 import VerifyPage from './routes/auth/Verify';
 import Test from './routes/test/test';
+import Expenses from './routes/expenses/Expenses';
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
             element: <AccountDetails />,
           },
         ],
+      },
+      {
+        path: '/expenses',
+        element: <Expenses />,
       },
     ],
   },
