@@ -7,6 +7,7 @@ import { FC, useState } from 'react';
 import client from '@/utils/client';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import queryClient from '@/query/query';
 
 interface DepositFundsProps {
   account: {
@@ -42,6 +43,8 @@ const DepositFunds: FC<DepositFundsProps> = ({ account, onClose }) => {
         return;
       }
 
+      queryClient.invalidateQueries({ queryKey: ['account-details', account.id] });
+      queryClient.invalidateQueries({ queryKey: ['all-accounts'] });
       toast.success('Deposit successful');
       onClose();
     },

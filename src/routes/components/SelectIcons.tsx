@@ -11,7 +11,7 @@ export function SelectIcons({
 }) {
   return (
     <div>
-      <div className='mb-2 text-2xl font-semibold opacity-80'>Select icon:</div>
+      <div className='mb-2 text-sm font-medium opacity-80'>Select icon:</div>
       <div className='flex gap-3'>
         {ICONS.map((i) => (
           <button

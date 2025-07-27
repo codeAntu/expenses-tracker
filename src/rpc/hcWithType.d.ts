@@ -150,6 +150,51 @@ declare const client: {
     api: {
         account: {
             ":id": import("hono/client").ClientRequest<{
+                $get: {
+                    input: {
+                        param: {
+                            id: string;
+                        };
+                    };
+                    output: never;
+                    outputFormat: "json";
+                    status: 404;
+                } | {
+                    input: {
+                        param: {
+                            id: string;
+                        };
+                    };
+                    output: never;
+                    outputFormat: "json";
+                    status: 500;
+                } | {
+                    input: {
+                        param: {
+                            id: string;
+                        };
+                    };
+                    output: {
+                        success: boolean;
+                        statusCode: number;
+                        message: string;
+                        data: {
+                            id: string;
+                            title: string;
+                            description: string | null;
+                            balance: string;
+                            icon: string;
+                            color: string;
+                            userId: string;
+                            createdAt: string;
+                            updatedAt: string;
+                        } | null;
+                        error: string | null;
+                        timestamp: string;
+                    };
+                    outputFormat: "json";
+                    status: 200;
+                };
                 $put: {
                     input: {
                         json: {

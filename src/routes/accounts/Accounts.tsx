@@ -8,6 +8,7 @@ import Account from './components/Account';
 import AccountsLoading from './components/AccountsLoading';
 import { AddAccount } from './components/AddAccount';
 import NoAccounts from './components/NoAccounts';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 
 const Accounts: FC = () => {
   const [search, setSearch] = useState('');
@@ -56,7 +57,7 @@ const Accounts: FC = () => {
               className='w-full sm:w-64'
               onClear={() => setSearch('')}
             />
-            <Select value={sortOrder} onValueChange={(v) => setSortOrder(v as 'desc' | 'asc' | 'latest' | 'oldest')}>
+            <Select value={sortOrder} onValueChange={(v: 'desc' | 'asc' | 'latest' | 'oldest') => setSortOrder(v)}>
               <SelectTrigger className='bg-card max-w-24'>
                 <SelectValue placeholder='Sort by' />
               </SelectTrigger>
@@ -87,7 +88,15 @@ const Accounts: FC = () => {
                 </SelectItem>
               </SelectContent>
             </Select>
-            <AddAccount />
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <button className='btn btn-primary'>Add Account</button>
+              </DialogTrigger>
+              <DialogContent>
+                <AddAccount />
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
         {isLoading ? (
@@ -108,6 +117,7 @@ const Accounts: FC = () => {
                   color: acc.color,
                   createdAt: acc.createdAt,
                 }}
+                
               />
             ))}
           </div>

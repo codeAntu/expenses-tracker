@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import queryClient from '@/query/query';
 import client from '@/utils/client';
 import { useMutation } from '@tanstack/react-query';
 import { FC, useState } from 'react';
@@ -40,6 +41,8 @@ const WithdrawFunds: FC<WithdrawFundsProps> = ({ account, onClose }) => {
         toast.error('Failed to withdraw funds');
         return;
       }
+      queryClient.invalidateQueries({ queryKey: ['account-details', account.id] });
+      queryClient.invalidateQueries({ queryKey: ['all-accounts'] });
       toast.success('Withdrawal successful');
       onClose();
     },

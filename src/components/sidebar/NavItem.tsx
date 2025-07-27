@@ -10,7 +10,7 @@ interface NavItemProps {
 
 export function NavItem({ link, icon: Icon, children }: NavItemProps) {
   const path = useLocation().pathname;
-  const isActive = path.endsWith(link || '') || path.endsWith(`/${link}`) || path.endsWith(`/${link}/`);
+  const isActive = path.endsWith(link || '') || path.endsWith(`/${link}`) || path.startsWith(`${link}/`);
 
   return (
     <Link
