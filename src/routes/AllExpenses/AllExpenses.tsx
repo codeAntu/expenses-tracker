@@ -4,22 +4,16 @@ import client from '@/utils/client';
 import { getDefaultAccount } from '@/utils/useDefaultAccount';
 import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
-import { FC, useState } from 'react';
+import { useState } from 'react';
 import Loading from '../components/Loading';
-import AddExpense from './AddExpense';
+import AddExpense from '../expenses/AddExpense';
 
-interface ExpensesProps {}
-
-const Expenses: FC<ExpensesProps> = () => {
+const AllExpenses = () => {
   const [open, setOpen] = useState(false);
-  const defaultAccount = getDefaultAccount().account;
 
   const { data: res, isPending: isLoading } = useQuery({
-    queryKey: ['expenses', defaultAccount?.id],
-    queryFn: async () =>
-      await (
-        await client.api.expenses['by-account'][':accountId'].$get({ param: { accountId: defaultAccount?.id || '' } })
-      ).json(),
+    queryKey: ['expenses'],
+    queryFn: async () => await (await client.api.expenses.$get()).json(),
   });
 
   const expenses = res?.data || [];
@@ -34,7 +28,7 @@ const Expenses: FC<ExpensesProps> = () => {
             <Button onClick={() => setOpen(true)}>Add Expense</Button>
           </DialogTrigger>
           <DialogContent>
-            <AddExpense account={defaultAccount ? defaultAccount : undefined} onClose={() => setOpen(false)} />
+            <AddExpense onClose={() => setOpen(false)} />
           </DialogContent>
         </Dialog>
       </div>
@@ -86,4 +80,4 @@ const Expenses: FC<ExpensesProps> = () => {
   );
 };
 
-export default Expenses;
+export default AllExpenses;

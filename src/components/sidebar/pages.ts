@@ -25,8 +25,13 @@ export type NavPage = {
 export const overviewPages: NavPage[] = [
   { name: 'Dashboard', href: '/', icon: Home },
   {
-    name: 'Accounts',
+    name: 'Account',
     href: '/account',
+    icon: Wallet,
+  },
+  {
+    name: 'Expenses',
+    href: '/expenses',
     icon: Wallet,
   },
   {
@@ -35,8 +40,8 @@ export const overviewPages: NavPage[] = [
     icon: Landmark,
   },
   {
-    name: 'Expenses',
-    href: '/expenses',
+    name: 'All Expenses',
+    href: '/all-expenses',
     icon: Wallet,
   },
   {

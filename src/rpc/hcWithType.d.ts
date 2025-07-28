@@ -779,6 +779,52 @@ declare const client: {
     };
 } & {
     api: {
+        expenses: {
+            "by-account": {
+                ":accountId": import("hono/client").ClientRequest<{
+                    $get: {
+                        input: {
+                            param: {
+                                accountId: string;
+                            };
+                        };
+                        output: never;
+                        outputFormat: "json";
+                        status: import("hono/utils/http-status").ContentfulStatusCode;
+                    } | {
+                        input: {
+                            param: {
+                                accountId: string;
+                            };
+                        };
+                        output: {
+                            success: boolean;
+                            statusCode: number;
+                            message: string;
+                            data: {
+                                id: string;
+                                amount: string;
+                                description: string;
+                                transactionType: "deposit" | "withdrawal" | "expense" | "goal" | "transfer" | "send" | "receive";
+                                userId: string;
+                                accountId: string | null;
+                                referenceId: string | null;
+                                referenceType: string | null;
+                                createdAt: string;
+                                updatedAt: string;
+                            }[] | null;
+                            error: string | null;
+                            timestamp: string;
+                        };
+                        outputFormat: "json";
+                        status: 200;
+                    };
+                }>;
+            };
+        };
+    };
+} & {
+    api: {
         hello: import("hono/client").ClientRequest<{
             $get: {
                 input: {};

@@ -13,6 +13,7 @@ import VerifyPage from './routes/auth/Verify';
 import Test from './routes/test/test';
 import Expenses from './routes/expenses/Expenses';
 import DefaultAccount from './routes/defaultAccount/DefaultAccount';
+import AllExpenses from './routes/AllExpenses/AllExpenses';
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
       {
         path: '/expenses',
         element: <Expenses />,
+      },
+      {
+        path: 'all-expenses',
+        element: <AllExpenses />,
       },
     ],
   },
