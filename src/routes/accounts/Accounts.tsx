@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ArrowDown, ArrowUp, ClockArrowDown, ClockArrowUp } from 'lucide-react';
 import { FC, useMemo, useState } from 'react';
 import Loading from '../components/Loading';
-import Account from './components/Account';
+import AccountCard from './components/AccountCard';
 import { AddAccount } from './components/AddAccount';
 import NoAccounts from './components/NoAccounts';
 
@@ -14,7 +14,7 @@ const Accounts: FC = () => {
   const [search, setSearch] = useState('');
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc' | 'latest' | 'oldest'>('latest');
 
-  const { data } = useQuery({
+  const { data, isPending: isLoading } = useQuery({
     queryKey: ['all-accounts'],
     queryFn: async () => await (await client.api.account.$get()).json(),
   });
@@ -41,8 +41,6 @@ const Accounts: FC = () => {
     }
     return filtered;
   }, [accounts, search, sortOrder]);
-
-  const isLoading = !data && !accounts.length;
 
   return (
     <div className='w-full'>
@@ -106,7 +104,7 @@ const Accounts: FC = () => {
         ) : (
           <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4'>
             {filteredAccounts.map((acc) => (
-              <Account
+              <AccountCard
                 key={acc.id}
                 account={{
                   id: acc.id,

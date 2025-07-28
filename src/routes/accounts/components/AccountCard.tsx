@@ -20,7 +20,7 @@ interface AccountProps {
     createdAt: string;
   };
 }
-const Account: FC<AccountProps> = ({ account }) => {
+const AccountCard: FC<AccountProps> = ({ account }) => {
   const navigate = useNavigate();
   const [openDeposit, setOpenDeposit] = useState(false);
   const [openWithdraw, setOpenWithdraw] = useState(false);
@@ -71,4 +71,4 @@ const Account: FC<AccountProps> = ({ account }) => {
   );
 };
 
-export default Account;
+export default AccountCard;

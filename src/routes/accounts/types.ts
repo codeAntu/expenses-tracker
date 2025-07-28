@@ -1,7 +1,7 @@
 export type Account = {
   id: string;
   title: string;
-  description?: string;
+  description?: string | null;
   balance: string;
   icon?: string;
   color?: string;

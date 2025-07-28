@@ -1,9 +1,7 @@
-import { useDefaultAccountStore } from '@/zustand/defaultAccount';
+import { getDefaultAccount } from '@/utils/useDefaultAccount';
 
 const DefaultAccount = () => {
-  const { defaultAccount: account } = useDefaultAccountStore();
-
-  console.log();
+  const account = getDefaultAccount().account;
 
   return (
     <div>
@@ -25,6 +23,5 @@ const DefaultAccount = () => {
     </div>
   );
 };
-
 
 export default DefaultAccount;

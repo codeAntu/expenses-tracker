@@ -9,19 +9,19 @@ import {
 } from '@/components/ui/dropdown-menu';
 import queryClient from '@/query/query';
 import { IconBorder } from '@/routes/components/Icon';
-import { useDefaultAccountStore } from '@/zustand/defaultAccount';
 import { MoreHorizontal } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { AddAccount } from '../../components/AddAccount';
 import DeleteAccount from '../../components/DeleteAccount';
 import { Account } from '../../types';
+import { useDefaultAccountIdStore } from '@/zustand/defaultAccountId';
 
 export function AccountActions({ account }: { account: Account }) {
   const [open, setOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const navigate = useNavigate();
-  const { setDefaultAccount } = useDefaultAccountStore();
+  const { setDefaultAccountId } = useDefaultAccountIdStore();
 
   return (
     <div>
@@ -39,7 +39,7 @@ export function AccountActions({ account }: { account: Account }) {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
-              setDefaultAccount(account);
+              setDefaultAccountId(account.id);
             }}
           >
             Set as Default{' '}
