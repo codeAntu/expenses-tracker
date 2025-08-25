@@ -14,6 +14,7 @@ import Test from './routes/test/test';
 import Expenses from './routes/expenses/Expenses';
 import DefaultAccount from './routes/defaultAccount/DefaultAccount';
 import AllExpenses from './routes/AllExpenses/AllExpenses';
+import KeyAuth from './routes/auth/KeyAuth';
 
 const router = createBrowserRouter([
   {
@@ -76,6 +77,10 @@ const router = createBrowserRouter([
       {
         path: '/verify',
         element: <VerifyPage />,
+      },
+      {
+        path: '/key-auth',
+        element: <KeyAuth />,
       },
     ],
   },
