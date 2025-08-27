@@ -43,7 +43,7 @@ export default function Register() {
   const [privateKey, setPrivateKey] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async ({ email, publicKey }: { email: string; publicKey: string }) => {
       return await (await client.api['key-auth'].register.$post({ json: { email, publicKey } })).json();
     },
@@ -52,7 +52,7 @@ export default function Register() {
         toast.error(data.message || 'Registration failed. Please try again.');
         return;
       }
-      toast.success('Registration successful! Please check your email for further instructions.');
+      toast.success('Registration successful!');
       navigate('/key-auth/verify?email=' + encodeURIComponent(email));
     },
   });
@@ -107,8 +107,15 @@ export default function Register() {
             </div>
           </div>
 
-          <Button type='submit' className='w-full' disabled={!email.trim()}>
-            Generate Keys & Register
+          <Button type='submit' className='w-full' disabled={!email.trim() || isPending}>
+            {isPending ? (
+              <div className='flex items-center'>
+                <div className='mr-2 h-4 w-4 animate-spin rounded-full border-b-2 border-white'></div>
+                Generating Keys & Registering...
+              </div>
+            ) : (
+              'Generate Keys & Register'
+            )}
           </Button>
         </form>
       </div>

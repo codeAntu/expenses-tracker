@@ -16,6 +16,7 @@ import DefaultAccount from './routes/defaultAccount/DefaultAccount';
 import Expenses from './routes/expenses/Expenses';
 import Test from './routes/test/test';
 import KeyVerifyPage from './routes/auth/KeyAuth/Verify';
+import ProtectedPage from './routes/auth/KeyAuth/Protected';
 
 const router = createBrowserRouter([
   {
@@ -79,23 +80,6 @@ const router = createBrowserRouter([
         path: '/verify',
         element: <VerifyPage />,
       },
-      {
-        path: '/key-auth',
-        children: [
-          {
-            path: 'register',
-            element: <Register />,
-          },
-          {
-            path: 'verify',
-            element: <KeyVerifyPage />,
-          },
-          {
-            path: 'protected',
-            element: <div>Key Auth Protected Page</div>,
-          },
-        ],
-      },
     ],
   },
   {
@@ -105,6 +89,23 @@ const router = createBrowserRouter([
         <Test />
       </Layout>
     ),
+  },
+  {
+    path: '/key-auth',
+    children: [
+      {
+        path: 'register',
+        element: <Register />,
+      },
+      {
+        path: 'verify',
+        element: <KeyVerifyPage />,
+      },
+      {
+        path: 'protected',
+        element: <ProtectedPage />,
+      },
+    ],
   },
   { path: '*', element: <NotFoundPage /> },
 ]);

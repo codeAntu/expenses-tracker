@@ -1,93 +1,95 @@
 import { Button } from '@/components/ui/button';
 import client from '@/utils/client';
 import { getKeyPair } from '@/utils/indexedDB';
+import { useKeyAuthStore } from '@/zustand/keyAuthStore';
 import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 
 export default function KeyVerifyPage() {
   const [email, setEmail] = useState('');
+  const { setToken } = useKeyAuthStore();
+  const navigate = useNavigate();
 
-  const { mutate: getChallenge } = useMutation({
+  const { mutate: getChallenge, isPending: isLoadingChallenge } = useMutation({
     mutationFn: async (email: string) => {
       return await (await client.api['key-auth'].challenge.$post({ json: { email } })).json();
     },
     onSuccess: async (data) => {
+      if (!data.success) {
+        toast.error(data.message || 'Failed to get challenge. Please try again.');
+        return;
+      }
+
+      const challenge = data.data?.challenge;
+
+      if (!challenge) {
+        toast.error('No challenge received from server.');
+        return;
+      }
+
+      const keyPair = await getKeyPair(email);
+
+      if (!keyPair) {
+        toast.error('No key pair found for this email. Please register first.');
+        return;
+      }
+
       try {
-        if (!data.success) {
-          toast.error(data.message || 'Failed to get challenge. Please try again.');
-          return;
-        }
+        // Convert your stored private key PEM to a crypto key
+        // Extract base64 content from PEM format (remove headers and newlines)
+        const pemContent = keyPair.privateKey
+          .replace(/-----BEGIN PRIVATE KEY-----/g, '')
+          .replace(/-----END PRIVATE KEY-----/g, '')
+          .replace(/\r?\n|\r/g, '');
 
-        console.log('here');
-
-        const challenge = data.data?.challenge;
-
-        if (!challenge) {
-          toast.error('No challenge received from server.');
-          return;
-        }
-
-        const keyPair = await getKeyPair(email);
-
-        if (!keyPair) {
-          toast.error('No key pair found for this email. Please register first.');
-          return;
-        }
-
-        console.log('KeyPair retrieved:', keyPair);
-
-        // Convert PEM private key to ArrayBuffer
-        const pemPrivateKey = keyPair.privateKey;
-        const pemHeader = '-----BEGIN PRIVATE KEY-----';
-        const pemFooter = '-----END PRIVATE KEY-----';
-        const pemContents = pemPrivateKey.replace(pemHeader, '').replace(pemFooter, '').replace(/\s/g, '');
-        const privateKeyBuffer = Uint8Array.from(atob(pemContents), (c) => c.charCodeAt(0));
-
+        const privateKeyBuffer = Uint8Array.from(atob(pemContent), (c) => c.charCodeAt(0));
         const privateKey = await window.crypto.subtle.importKey(
           'pkcs8',
           privateKeyBuffer,
-          {
-            name: 'RSA-PSS',
-            hash: 'SHA-256',
-          },
+          { name: 'RSA-PSS', hash: 'SHA-256' },
           false,
           ['sign'],
         );
 
-        console.log('Private key imported successfully');
-
+        // Sign the challenge string
         const encoder = new TextEncoder();
+        const challengeBuffer = encoder.encode(challenge); // Convert string to bytes
+
         const signatureBuffer = await window.crypto.subtle.sign(
           {
             name: 'RSA-PSS',
-            saltLength: 32,
+            saltLength: 32, // SHA-256 hash length
           },
           privateKey,
-          encoder.encode(challenge),
+          challengeBuffer,
         );
-        const signature = btoa(String.fromCharCode(...new Uint8Array(signatureBuffer)));
 
-        console.log({ signature });
-        console.log('About to call verifySignature');
+        // Convert signature to base64 string
+        const signature = btoa(String.fromCharCode(...new Uint8Array(signatureBuffer)));
 
         verifySignature({ email, signature });
       } catch (error) {
-        console.error('Error in onSuccess:', error);
-        toast.error(
-          'An error occurred during verification: ' + (error instanceof Error ? error.message : String(error)),
-        );
+        console.error('Cryptographic operation failed:', error);
+        toast.error('Failed to sign challenge. Please check your private key and try again.');
       }
     },
   });
 
-  const { mutate: verifySignature } = useMutation({
+  const { mutate: verifySignature, isPending: isLoadingVerify } = useMutation({
     mutationFn: async (params: { email: string; signature: string }) => {
       return await (await client.api['key-auth'].verify.$post({ json: params })).json();
     },
     onSuccess: (data) => {
       if (data.success) {
-        toast.success('Verification successful! You are now logged in.');
+        if (data.data?.token) {
+          setToken(data.data.token);
+          toast.success('Verification successful! You are now logged in.');
+          navigate('/key-auth/protected');
+        } else {
+          toast.error('No token received from server.');
+        }
       } else {
         toast.error(data.message || 'Verification failed. Please try again.');
       }
@@ -124,8 +126,15 @@ export default function KeyVerifyPage() {
             </div>
           )}
         </div>
-        <Button onClick={handleVerify} className='w-full'>
-          Verify with Key
+        <Button onClick={handleVerify} className='w-full' disabled={isLoadingChallenge || isLoadingVerify}>
+          {isLoadingChallenge || isLoadingVerify ? (
+            <div className='flex items-center'>
+              <div className='mr-2 h-4 w-4 animate-spin rounded-full border-b-2 border-white'></div>
+              {isLoadingChallenge ? 'Getting Challenge...' : 'Verifying...'}
+            </div>
+          ) : (
+            'Verify with Key'
+          )}
         </Button>
         <div className='mt-4 text-center'>
           <a

@@ -1,0 +1,182 @@
+import db from "@/db";
+import { Accounts, transactionsTable } from "@/db/schema";
+import { TRANSACTION_TYPES } from "@/utils/types/types";
+import { and, desc, eq } from "drizzle-orm";
+import { z } from "zod";
+const ICON = "";
+const COLOR = "";
+const DESCRIPTION = "";
+const MAX_BALANCE = 1_000_000;
+export const createAccountValidator = z.object({
+    title: z.string().min(1, "Title is required").max(100, "Title is too long"),
+    description: z.string().max(255, "Description is too long").optional(),
+    icon: z.string().optional(),
+    color: z.string().optional(),
+});
+export const withdrawDepositValidator = z.object({
+    amount: z
+        .number()
+        .min(0.01, "Amount must be greater than 0")
+        .max(1_000_000, "Amount is too large"),
+    description: z.string().max(255, "Description is too long").optional(),
+});
+export async function createAccount(userId, data) {
+    try {
+        const { title, description, icon, color } = data;
+        const result = await db
+            .insert(Accounts)
+            .values({
+            userId,
+            title,
+            description,
+            icon: icon || ICON,
+            color: color || COLOR,
+        })
+            .returning();
+        return result[0];
+    }
+    catch (error) {
+        throw error;
+    }
+}
+export async function updateAccount(userId, accountId, data) {
+    try {
+        if (!userId)
+            throw new Error("User ID is required for account update");
+        const result = await db
+            .update(Accounts)
+            .set(data)
+            .where(and(eq(Accounts.id, accountId), eq(Accounts.userId, userId)))
+            .returning();
+        if (!result.length)
+            throw new Error("Account not found or access denied");
+        return result[0];
+    }
+    catch (error) {
+        throw error;
+    }
+}
+export async function deleteAccount(userId, accountId) {
+    try {
+        const result = await db
+            .delete(Accounts)
+            .where(and(eq(Accounts.id, accountId), eq(Accounts.userId, userId)))
+            .returning();
+        if (!result.length)
+            throw new Error("Account not found or access denied");
+        return result[0];
+    }
+    catch (error) {
+        throw error;
+    }
+}
+export async function getAllAccounts(userId) {
+    return await db
+        .select()
+        .from(Accounts)
+        .where(eq(Accounts.userId, userId))
+        .orderBy(desc(Accounts.createdAt));
+}
+export async function depositToAccount(userId, accountId, amount, description) {
+    try {
+        const updatedAccount = await addAmountToAccount(userId, accountId, amount);
+        await db.insert(transactionsTable).values({
+            amount: amount.toString(),
+            description: description || DESCRIPTION,
+            transactionType: TRANSACTION_TYPES.DEPOSIT,
+            userId: userId,
+            accountId: accountId,
+        });
+        return updatedAccount;
+    }
+    catch (error) {
+        throw error;
+    }
+}
+export async function withdrawFromAccount(userId, accountId, amount, description) {
+    try {
+        // Use deductAmountFromAccount for balance update
+        const updatedAccount = await deductAmountFromAccount(userId, accountId, amount);
+        await db.insert(transactionsTable).values({
+            amount: amount.toString(),
+            description: description || DESCRIPTION,
+            transactionType: TRANSACTION_TYPES.WITHDRAWAL,
+            userId: userId,
+            accountId: accountId,
+        });
+        return updatedAccount;
+    }
+    catch (error) {
+        throw error;
+    }
+}
+export async function addAmountToAccount(userId, accountId, amount) {
+    try {
+        const account = await db
+            .select()
+            .from(Accounts)
+            .where(and(eq(Accounts.id, accountId), eq(Accounts.userId, userId)));
+        if (!account.length)
+            throw new Error("Account not found or access denied");
+        const currentBalance = parseFloat(account[0].balance);
+        const newBalance = (currentBalance + amount).toFixed(2);
+        const updatedAccount = await db
+            .update(Accounts)
+            .set({
+            balance: newBalance,
+            updatedAt: new Date(),
+        })
+            .where(and(eq(Accounts.id, accountId), eq(Accounts.userId, userId)))
+            .returning();
+        if (!updatedAccount.length)
+            throw new Error("Failed to update account balance");
+        return updatedAccount[0];
+    }
+    catch (error) {
+        throw error;
+    }
+}
+export async function deductAmountFromAccount(userId, accountId, amount) {
+    try {
+        const account = await db
+            .select()
+            .from(Accounts)
+            .where(and(eq(Accounts.id, accountId), eq(Accounts.userId, userId)));
+        if (!account.length)
+            throw new Error("Account not found or access denied");
+        const currentBalance = parseFloat(account[0].balance);
+        if (currentBalance < amount)
+            throw new Error("Insufficient funds");
+        const newBalance = (currentBalance - amount).toFixed(2);
+        console.log("Deducting amount from account:", {
+            userId,
+            accountId,
+            amount,
+            currentBalance,
+            newBalance,
+        });
+        const updatedAccount = await db
+            .update(Accounts)
+            .set({
+            balance: newBalance,
+            updatedAt: new Date(),
+        })
+            .where(and(eq(Accounts.id, accountId), eq(Accounts.userId, userId)))
+            .returning();
+        if (!updatedAccount.length)
+            throw new Error("Failed to update account balance");
+        return updatedAccount[0];
+    }
+    catch (error) {
+        throw error;
+    }
+}
+export async function getAccountById(userId, accountId) {
+    const account = await db
+        .select()
+        .from(Accounts)
+        .where(and(eq(Accounts.id, accountId), eq(Accounts.userId, userId)));
+    if (!account.length)
+        throw new Error("Account not found or access denied");
+    return account[0];
+}

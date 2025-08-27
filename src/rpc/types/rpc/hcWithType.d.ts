@@ -844,19 +844,9 @@ declare const client: {
                             publicKey: string;
                         };
                     };
-                    output: {
-                        success: boolean;
-                        statusCode: number;
-                        message: string;
-                        data: {
-                            id: string;
-                            email: string;
-                        } | null;
-                        error: string | null;
-                        timestamp: string;
-                    };
+                    output: never;
                     outputFormat: "json";
-                    status: 200;
+                    status: 409;
                 } | {
                     input: {
                         json: {
@@ -973,6 +963,10 @@ declare const client: {
                         message: string;
                         data: {
                             token: string;
+                            user: {
+                                id: string;
+                                email: string;
+                            };
                         } | null;
                         error: string | null;
                         timestamp: string;
@@ -991,11 +985,6 @@ declare const client: {
                     input: {};
                     output: never;
                     outputFormat: "json";
-                    status: 404;
-                } | {
-                    input: {};
-                    output: never;
-                    outputFormat: "json";
                     status: 500;
                 } | {
                     input: {};
@@ -1008,12 +997,15 @@ declare const client: {
                         success: boolean;
                         statusCode: number;
                         message: string;
-                        data: {
-                            id: string;
-                            email: string;
-                            publicKey: string;
-                            createdAt: string;
-                            updatedAt: string;
+                        data: string | {
+                            [x: string]: any;
+                            iss?: string | undefined | undefined;
+                            sub?: string | undefined | undefined;
+                            aud?: string | string[] | undefined | undefined;
+                            exp?: number | undefined | undefined;
+                            nbf?: number | undefined | undefined;
+                            iat?: number | undefined | undefined;
+                            jti?: string | undefined | undefined;
                         } | null;
                         error: string | null;
                         timestamp: string;
