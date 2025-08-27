@@ -3,18 +3,19 @@ import { Toaster } from 'sonner';
 import { ProtectedRoute, UnprotectedRoute } from './components/ProtectedRoute';
 import Layout from './components/layout';
 import { ThemeProvider } from './components/theme-provider';
+import AllExpenses from './routes/AllExpenses/AllExpenses';
 import Home from './routes/Home';
 import NotFoundPage from './routes/NotFoundPage';
 import Accounts from './routes/accounts/Accounts';
 import AccountDetails from './routes/accounts/pages/AccountDetails';
+import Register from './routes/auth/KeyAuth/Register';
 import LoginPage from './routes/auth/Login';
 import SignupPage from './routes/auth/Signup';
 import VerifyPage from './routes/auth/Verify';
-import Test from './routes/test/test';
-import Expenses from './routes/expenses/Expenses';
 import DefaultAccount from './routes/defaultAccount/DefaultAccount';
-import AllExpenses from './routes/AllExpenses/AllExpenses';
-import KeyAuth from './routes/auth/KeyAuth';
+import Expenses from './routes/expenses/Expenses';
+import Test from './routes/test/test';
+import KeyVerifyPage from './routes/auth/KeyAuth/Verify';
 
 const router = createBrowserRouter([
   {
@@ -80,7 +81,20 @@ const router = createBrowserRouter([
       },
       {
         path: '/key-auth',
-        element: <KeyAuth />,
+        children: [
+          {
+            path: 'register',
+            element: <Register />,
+          },
+          {
+            path: 'verify',
+            element: <KeyVerifyPage />,
+          },
+          {
+            path: 'protected',
+            element: <div>Key Auth Protected Page</div>,
+          },
+        ],
       },
     ],
   },
