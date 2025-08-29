@@ -78,11 +78,11 @@ export default function Register() {
   console.log('Private Key:', privateKey);
 
   return (
-    <div className='flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4 dark:from-gray-900 dark:to-gray-800'>
-      <div className='w-full max-w-md space-y-8'>
+    <div className='flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 p-4 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900'>
+      <div className='flex w-full max-w-md flex-col gap-4 rounded-2xl bg-white/80 p-6 shadow-xl md:m-4 md:p-10 lg:m-10 dark:bg-gray-900/80'>
         <div className='text-center'>
-          <h2 className='text-3xl font-bold tracking-tight text-gray-900 dark:text-white'>Email Authentication</h2>
-          <p className='mt-2 text-sm text-gray-600 dark:text-gray-400'>
+          <h2 className='text-xl font-semibold tracking-tight text-gray-900 dark:text-white'>Email Authentication</h2>
+          <p className='mt-2 text-xs text-gray-600 dark:text-gray-400'>
             Enter your email address to continue and generate key
           </p>
         </div>

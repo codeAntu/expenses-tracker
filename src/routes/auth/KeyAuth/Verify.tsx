@@ -111,11 +111,11 @@ export default function KeyVerifyPage() {
   };
 
   return (
-    <div className='flex min-h-screen items-center justify-center bg-gradient-to-br from-green-50 to-blue-100 p-4 dark:from-gray-900 dark:to-gray-800'>
-      <div className='w-full max-w-lg space-y-8 rounded-xl border border-gray-200 bg-white/80 px-8 py-10 shadow-lg backdrop-blur-md dark:border-gray-800 dark:bg-gray-900/80'>
+    <div className='flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 p-4 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900'>
+      <div className='flex w-full max-w-md flex-col gap-4 rounded-2xl bg-white/80 p-6 shadow-xl md:m-4 md:p-10 lg:m-10 dark:bg-gray-900/80'>
         <div className='space-y-3 text-center'>
-          <h2 className='text-3xl font-bold tracking-tight text-gray-900 dark:text-white'>Key-Based Verification</h2>
-          <p className='mt-2 text-sm text-gray-700 dark:text-gray-300'>
+          <h2 className='text-xl font-semibold tracking-tight text-gray-900 dark:text-white'>Key-Based Verification</h2>
+          <p className='mt-2 text-xs text-gray-700 dark:text-gray-300'>
             Secure your account with cryptographic key authentication.
             <br />
             Click the button below to verify your identity using your device's private key.
