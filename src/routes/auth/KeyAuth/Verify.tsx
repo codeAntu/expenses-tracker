@@ -7,6 +7,47 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 
+async function getSignature(email: string, challenge: string): Promise<string | null> {
+  const keyPair = await getKeyPair(email);
+  if (!keyPair) {
+    toast.error('No key pair found for this email. Please register first.');
+    return null;
+  }
+  try {
+    const pemContent = keyPair.privateKey
+      .replace(/-----BEGIN PRIVATE KEY-----/g, '')
+      .replace(/-----END PRIVATE KEY-----/g, '')
+      .replace(/\r?\n|\r/g, '');
+
+    const privateKeyBuffer = Uint8Array.from(atob(pemContent), (c) => c.charCodeAt(0));
+    const privateKey = await window.crypto.subtle.importKey(
+      'pkcs8',
+      privateKeyBuffer,
+      { name: 'RSA-PSS', hash: 'SHA-256' },
+      false,
+      ['sign'],
+    );
+
+    const encoder = new TextEncoder();
+    const challengeBuffer = encoder.encode(challenge);
+
+    const signatureBuffer = await window.crypto.subtle.sign(
+      {
+        name: 'RSA-PSS',
+        saltLength: 32,
+      },
+      privateKey,
+      challengeBuffer,
+    );
+
+    return btoa(String.fromCharCode(...new Uint8Array(signatureBuffer)));
+  } catch (error) {
+    console.error('Cryptographic operation failed:', error);
+    toast.error('Failed to sign challenge. Please check your private key and try again.');
+    return null;
+  }
+}
+
 export default function KeyVerifyPage() {
   const [email, setEmail] = useState('');
   const { setToken } = useKeyAuthStore();
@@ -29,51 +70,9 @@ export default function KeyVerifyPage() {
         return;
       }
 
-      const keyPair = await getKeyPair(email);
-
-      if (!keyPair) {
-        toast.error('No key pair found for this email. Please register first.');
-        return;
-      }
-
-      try {
-        // Convert your stored private key PEM to a crypto key
-        // Extract base64 content from PEM format (remove headers and newlines)
-        const pemContent = keyPair.privateKey
-          .replace(/-----BEGIN PRIVATE KEY-----/g, '')
-          .replace(/-----END PRIVATE KEY-----/g, '')
-          .replace(/\r?\n|\r/g, '');
-
-        const privateKeyBuffer = Uint8Array.from(atob(pemContent), (c) => c.charCodeAt(0));
-        const privateKey = await window.crypto.subtle.importKey(
-          'pkcs8',
-          privateKeyBuffer,
-          { name: 'RSA-PSS', hash: 'SHA-256' },
-          false,
-          ['sign'],
-        );
-
-        // Sign the challenge string
-        const encoder = new TextEncoder();
-        const challengeBuffer = encoder.encode(challenge); // Convert string to bytes
-
-        const signatureBuffer = await window.crypto.subtle.sign(
-          {
-            name: 'RSA-PSS',
-            saltLength: 32, // SHA-256 hash length
-          },
-          privateKey,
-          challengeBuffer,
-        );
-
-        // Convert signature to base64 string
-        const signature = btoa(String.fromCharCode(...new Uint8Array(signatureBuffer)));
-
-        verifySignature({ email, signature });
-      } catch (error) {
-        console.error('Cryptographic operation failed:', error);
-        toast.error('Failed to sign challenge. Please check your private key and try again.');
-      }
+      const signature = await getSignature(email, challenge);
+      if (!signature) return;
+      verifySignature({ email, signature });
     },
   });
 

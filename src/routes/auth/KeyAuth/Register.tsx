@@ -6,6 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
+import { z } from 'zod';
 
 function arrayBufferToPem(buffer: ArrayBuffer, type: 'PUBLIC KEY' | 'PRIVATE KEY') {
   const base64 = btoa(String.fromCharCode(...new Uint8Array(buffer)));
@@ -38,6 +39,7 @@ async function generateKeyPair() {
 }
 
 export default function Register() {
+  const emailSchema = z.string().email();
   const [email, setEmail] = useState('codeantu@gmail.com');
   const [publicKey, setPublicKey] = useState<string | null>(null);
   const [privateKey, setPrivateKey] = useState<string | null>(null);
@@ -59,6 +61,11 @@ export default function Register() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const result = emailSchema.safeParse(email);
+    if (!result.success) {
+      toast.error('Please enter a valid email address.');
+      return;
+    }
 
     const { publicKey, privateKey } = await generateKeyPair();
     setPublicKey(publicKey);
